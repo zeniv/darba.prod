@@ -19,13 +19,14 @@
 
 | Service     | Image/Build            | Port  | Purpose                        |
 |-------------|------------------------|-------|--------------------------------|
-| nginx       | nginx:alpine           | 80    | Reverse proxy, routing         |
+| nginx       | nginx:alpine           | 80,443| Reverse proxy, SSL termination |
 | frontend    | front/Dockerfile       | 3000  | Next.js 16 SSR/SSG             |
 | api         | back/api/Dockerfile    | 8000  | NestJS REST + WebSocket        |
 | ai-worker   | back/ai-worker/Dockerfile | —  | Celery worker (no HTTP)        |
 | keycloak    | keycloak:23.0          | 8080  | SSO, OAuth2                    |
 | postgres    | pgvector/pgvector:pg16 | 5432  | Primary DB + vector search     |
 | redis       | redis:7-alpine         | 6379  | Cache, Bull queue, Celery broker |
+| pgadmin     | dpage/pgadmin4         | 5050  | Database management UI         |
 
 ## Request Flow — AI Task
 

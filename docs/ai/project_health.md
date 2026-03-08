@@ -1,6 +1,6 @@
 # Project Health — Darba
 
-**Last updated:** 2026-03-08
+**Last updated:** 2026-03-09
 
 ## Build Status
 
@@ -9,18 +9,27 @@
 | NestJS API | `tsc -p tsconfig.build.json` | PASS |
 | Next.js Frontend | `next dev --webpack` | PASS (24 pages) |
 | AI Worker | (Python, no build step) | Running |
-| Docker Compose | 7 services | ALL UP |
+| Docker Compose | 8 services | ALL UP |
 | Prisma migration | `20260307000000_init` | APPLIED |
 
-## Runtime Status (first launch 2026-03-08)
+## Runtime Status — Local
 
 | Endpoint | URL | Status |
 |----------|-----|--------|
-| Frontend | http://127.0.0.1:3000 | 200 |
-| API Health | http://127.0.0.1:8000/api/health | OK |
-| API Swagger | http://127.0.0.1:8000/api/docs | 200 |
+| Frontend | http://127.0.0.1:80 | 200 |
+| API Health | http://127.0.0.1:80/api/health | OK |
+| API Swagger | http://127.0.0.1:80/api/docs | 200 |
 | Keycloak | http://127.0.0.1:8080 | 200 |
-| Nginx | http://127.0.0.1:80 | 200 |
+| pgAdmin | http://127.0.0.1:5050 | 200 |
+
+## Runtime Status — Production (89.169.178.103)
+
+| Endpoint | URL | Status |
+|----------|-----|--------|
+| Frontend | http://89.169.178.103 | 200 |
+| API Swagger | http://89.169.178.103/api/docs | 200 |
+| Keycloak | http://89.169.178.103:8080 | 200 |
+| pgAdmin | http://89.169.178.103:5050 | 200 |
 
 ## Test Coverage
 
@@ -67,5 +76,5 @@ Priority: write tests before production launch.
 5. Error handling could be more granular (NestJS exception filters)
 6. No logging framework (just console)
 7. No monitoring/alerting setup
-8. No production .env (only local)
-9. HTTPS/SSL not configured
+8. HTTPS/SSL not configured (certbot ready, waiting DNS)
+9. Keycloak and pgAdmin exposed on public ports without auth proxy

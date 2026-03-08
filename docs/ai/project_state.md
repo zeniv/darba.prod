@@ -1,6 +1,6 @@
 # Project State — Darba
 
-**Last updated:** 2026-03-08
+**Last updated:** 2026-03-09
 
 ## Git / CI/CD
 
@@ -8,9 +8,18 @@
 - **Default branch:** dev (development)
 - **Stable branch:** main (production, updated via PR + owner approval)
 - **CI:** GitHub Actions — lint, typecheck, build on push to dev/main and PRs
-- **Deploy:** GitHub Actions — on push to dev (auto), on merged PR to main (after approval)
-- **GCP:** not configured yet — deploy workflow is a placeholder
+- **Deploy:** GitHub Actions — SSH deploy to Yandex Cloud on push to dev (auto), on merged PR to main (after approval)
 - **gh CLI:** installed, authenticated as zeniv
+
+## Production Server (Yandex Cloud)
+
+- **IP:** 89.169.178.103 (static)
+- **OS:** Ubuntu 22.04 LTS, 2 vCPU, 8 GB RAM, 40 GB SSD
+- **Domain:** darba.pro (DNS at nic.ru)
+- **SSL:** pending (certbot ready, waiting DNS propagation)
+- **Docker:** 29.3.0 + Compose 5.1.0
+- **Deploy key:** id_deploy (SSH from GitHub to server)
+- All 8 services running via docker compose
 
 ## Phase Completion
 
@@ -37,6 +46,7 @@ All 7 Docker services running and responding on `F:\work\code\darba`:
 | API (NestJS) | darba-api | 8000 | OK, Swagger at /api/docs |
 | Frontend (Next.js) | darba-frontend | 3000 | 200 |
 | Nginx | darba-nginx | 80 | 200 |
+| pgAdmin | darba-pgadmin-1 | 5050 | 200 |
 
 **DB migration applied:** `20260307000000_init` (15 tables created).
 
@@ -55,7 +65,7 @@ All 7 Docker services running and responding on `F:\work\code\darba`:
 - **Frontend components:** 7 (layout + ui)
 - **AI worker tasks:** 5 Python tasks
 - **Prisma models:** 15
-- **Docker services:** 7
+- **Docker services:** 8 (nginx, frontend, api, ai-worker, keycloak, postgres, redis, pgadmin)
 
 ## Launch Blockers — ALL RESOLVED
 
@@ -69,12 +79,9 @@ All 7 Docker services running and responding on `F:\work\code\darba`:
 
 ## Docker Launch Strategy
 
-Infrastructure via `docker compose -p darba up -d`:
-- postgres, redis, keycloak, ai-worker
+All services via `docker compose -p darba up -d --build`.
 
-App services via `docker run` (ghost container bug workaround):
-- darba-api (--network-alias api)
-- darba-frontend (--network-alias frontend)
-- darba-nginx
-
-See `scratchpad.md` for exact commands.
+Production deploy via SSH (appleboy/ssh-action):
+```bash
+cd /home/zzzeniv/darba && git pull origin dev && docker compose -p darba up -d --build --remove-orphans && docker image prune -f
+```
