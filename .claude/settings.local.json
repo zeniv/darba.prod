@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(iconv -f cp1251 -t utf-8)",
+      "Bash(python3 -c \" with open\\(r''E:\\\\work\\\\code\\\\darba\\\\docs\\\\brief.md'', encoding=''cp1251''\\) as f: print\\(f.read\\(\\)\\) \")",
+      "Bash(npx @nestjs/cli@latest new . --package-manager npm --skip-git --language TS)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Bash(npx create-next-app@16 . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack --no-react-compiler)",
+      "Bash(npm install next-intl @tanstack/react-query zustand next-themes lucide-react class-variance-authority clsx tailwind-merge socket.io-client)",
+      "Bash(npx shadcn@latest init --defaults)",
+      "Bash(npx next build)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx prisma generate)"
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+# Environment files (NEVER commit real secrets)
+back/.env.local
+back/.env.dev
+back/.env.test
+back/.env.prod
+back/.env
+
+# Node
+node_modules/
+.next/
+dist/
+build/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Docker volumes data
+postgres_data/
+redis_data/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/settings.json
+.idea/
+*.suo
+*.user
+
+# SSL certs (managed separately)
+infra/nginx/ssl/
+
+# Prisma generated
+back/api/src/generated/
+
+# Prisma build cache
+*.tsbuildinfo
+
+# Uploads / media (use S3)
+front/public/uploads/
+back/media/
