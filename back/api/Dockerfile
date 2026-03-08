@@ -10,7 +10,7 @@ CMD ["npm", "run", "start:dev"]
 FROM node:20-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 # Prisma generate needs a DATABASE_URL at build time (not used, just for codegen)
 ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy"
