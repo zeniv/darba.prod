@@ -2,13 +2,17 @@ name: Deploy
 
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
+  pull_request:
+    branches: [main]
+    types: [closed]
 
 jobs:
   deploy:
-    name: Deploy to ${{ github.ref_name }}
+    name: Deploy to ${{ github.event_name == 'pull_request' && 'main' || github.ref_name }}
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
+    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    environment: ${{ github.event_name == 'pull_request' && 'main' || github.ref_name }}
 
     steps:
       - uses: actions/checkout@v4
