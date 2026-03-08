@@ -9,6 +9,9 @@
 - [x] Docker launch — all 7 services running (2026-03-08)
 - [x] PrismaClient adapter — `@prisma/adapter-pg` + `pg.Pool`
 - [x] Fix NestJS CLI — bypass with `tsc -p tsconfig.build.json + node dist/main.js`
+- [x] Git repo on GitHub (zeniv/darba.dev), SSH key, gh CLI
+- [x] CI/CD workflows (ci.yml + deploy.yml)
+- [x] Branch strategy: dev (default) + main (stable, PR-only)
 
 ## High Priority (Pre-Production)
 
