@@ -106,6 +106,21 @@ services:
     networks:
       - darba
 
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@darba.pro}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-darba}
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - darba
+
   redis:
     image: redis:7-alpine
     command: redis-server --appendonly yes
