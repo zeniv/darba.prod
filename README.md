@@ -20,7 +20,7 @@ White-label AI portal with social layer and subscription monetization.
 | Database | PostgreSQL + pgvector |
 | Cache/Queue | Redis |
 | Auth | Keycloak 23 |
-| Infra | Docker Compose, Nginx, GitHub Actions |
+| Infra | Docker Compose, Nginx, GitHub Actions, Yandex Cloud |
 
 ## Quick start
 
@@ -41,10 +41,16 @@ go.bat
 ```
 
 Services start at:
-- Frontend: http://127.0.0.1:3000
-- API + Swagger: http://127.0.0.1:8000/api/docs
+- Frontend: http://127.0.0.1:80
+- API + Swagger: http://127.0.0.1:80/api/docs
 - Keycloak: http://127.0.0.1:8080
-- Nginx: http://127.0.0.1:80
+- pgAdmin: http://127.0.0.1:5050
+
+## Production
+
+- **Server:** Yandex Cloud, Ubuntu 22.04, 89.169.178.103
+- **Domain:** darba.pro (DNS at nic.ru)
+- **Deploy:** push to `dev` auto-deploys via SSH; merge PR to `main` deploys after approval
 
 ## Project structure
 
@@ -56,7 +62,8 @@ darba/
 │   └── ai-worker/      # Python Celery worker (5 AI tasks)
 ├── infra/              # nginx, keycloak, postgres configs
 ├── docs/               # Architecture, roadmap, conventions
-└── .github/            # CI/CD workflows
+├── .github/            # CI/CD workflows (ci.yml, deploy.yml)
+└── docker-compose.yml  # 8 services (nginx, frontend, api, ai-worker, keycloak, postgres, redis, pgadmin)
 ```
 
 ## Branches

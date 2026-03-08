@@ -187,7 +187,9 @@ src/
 | back/api/tsconfig.json | noImplicitAny:false, strictNullChecks:true |
 | back/api/tsconfig.build.json | Build config (excludes prisma.config.ts) |
 | front/next.config.ts | Standalone output, API proxy rewrites |
-| docker-compose.yml | 7 services production |
+| docker-compose.yml | 8 services production |
+| .github/workflows/ci.yml | Lint, typecheck, build |
+| .github/workflows/deploy.yml | SSH deploy to Yandex Cloud |
 | docker-compose.dev.yml | Dev overrides |
 | infra/nginx/conf.d/darba.conf | Reverse proxy rules |
 | infra/keycloak/darba-realm.json | Keycloak realm config |
