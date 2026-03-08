@@ -4,7 +4,15 @@ Working notes for current development context.
 
 ## Current Focus
 
-First launch done (2026-03-08). Next: auth flow testing, admin wizard, production prep.
+First launch done (2026-03-08). Git repo set up on GitHub (zeniv/darba.dev).
+Next: auth flow testing, admin wizard, production prep.
+
+## Git Workflow
+
+- **dev** — default branch, push triggers CI + deploy
+- **main** — stable, updated only via merged PR (owner approval required)
+- SSH key: `C:\Users\eugene\.ssh\id_ed25519_github` (added to ssh-agent)
+- gh CLI: `C:\Program Files\GitHub CLI\gh.exe`, authenticated as zeniv
 
 ## Working Directory
 

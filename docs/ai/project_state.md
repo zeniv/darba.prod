@@ -2,6 +2,16 @@
 
 **Last updated:** 2026-03-08
 
+## Git / CI/CD
+
+- **Repo:** github.com/zeniv/darba.dev
+- **Default branch:** dev (development)
+- **Stable branch:** main (production, updated via PR + owner approval)
+- **CI:** GitHub Actions — lint, typecheck, build on push to dev/main and PRs
+- **Deploy:** GitHub Actions — on push to dev (auto), on merged PR to main (after approval)
+- **GCP:** not configured yet — deploy workflow is a placeholder
+- **gh CLI:** installed, authenticated as zeniv
+
 ## Phase Completion
 
 | Phase | Name | Status |
