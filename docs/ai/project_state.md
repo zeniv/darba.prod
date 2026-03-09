@@ -15,8 +15,8 @@
 
 - **IP:** 89.169.178.103 (static)
 - **OS:** Ubuntu 22.04 LTS, 2 vCPU, 8 GB RAM, 40 GB SSD
-- **Domain:** darba.pro (DNS at nic.ru)
-- **SSL:** pending (certbot ready, waiting DNS propagation)
+- **Domain:** darba.pro (DNS at nic.ru DNS-master)
+- **SSL:** Let's Encrypt, expires 2026-06-07 (certbot auto-renew cron)
 - **Docker:** 29.3.0 + Compose 5.1.0
 - **Deploy key:** id_deploy (SSH from GitHub to server)
 - All 8 services running via docker compose

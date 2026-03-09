@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type {
   PaymentProvider,
@@ -61,8 +61,9 @@ export class YooKassaProvider implements PaymentProvider {
     };
   }
 
-  async parseWebhook(body: any): Promise<WebhookEvent> {
-    // YooKassa sends: { type: "notification", event: "payment.succeeded", object: {...} }
+  async parseWebhook(body: any, headers: Record<string, string>): Promise<WebhookEvent> {
+    // Verify: fetch payment from YooKassa API to confirm status
+    await this.verifyPayment(body.object?.id);
     const payment = body.object;
     const statusMap: Record<string, WebhookEvent['status']> = {
       'payment.succeeded': 'paid',
@@ -77,5 +78,22 @@ export class YooKassaProvider implements PaymentProvider {
       currency: payment.amount.currency,
       metadata: payment.metadata || {},
     };
+  }
+
+  /** Verify webhook by fetching payment status directly from YooKassa API */
+  private async verifyPayment(paymentId: string): Promise<void> {
+    if (!paymentId || !this.shopId || !this.secretKey) return;
+    const response = await fetch(`${this.apiUrl}/payments/${paymentId}`, {
+      headers: {
+        Authorization:
+          'Basic ' +
+          Buffer.from(`${this.shopId}:${this.secretKey}`).toString('base64'),
+      },
+    });
+    if (!response.ok) {
+      this.logger.error(`YooKassa verify failed: ${response.status}`);
+      throw new UnauthorizedException('Failed to verify payment with YooKassa');
+    }
+    this.logger.log(`YooKassa webhook verified for payment ${paymentId}`);
   }
 }

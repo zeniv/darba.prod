@@ -20,6 +20,10 @@ services:
     build:
       context: ./front
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_KEYCLOAK_URL=${NEXT_PUBLIC_KEYCLOAK_URL:-http://localhost:8080}
+        - NEXT_PUBLIC_KEYCLOAK_REALM=${NEXT_PUBLIC_KEYCLOAK_REALM:-darba}
+        - NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=${NEXT_PUBLIC_KEYCLOAK_CLIENT_ID:-darba-frontend}
     env_file:
       - ./back/.env
     environment:

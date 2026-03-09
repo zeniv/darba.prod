@@ -18,6 +18,7 @@ import { ContentModule } from './content/content.module';
 import { SocialModule } from './social/social.module';
 import { AdminModule } from './admin/admin.module';
 import { TelegramModule } from './telegram/telegram.module';
+import { SetupModule } from './setup/setup.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { TelegramModule } from './telegram/telegram.module';
     SupportModule,
     AdminModule,
     TelegramModule,
+    SetupModule,
   ],
   controllers: [AppController],
   providers: [

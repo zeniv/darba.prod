@@ -22,14 +22,16 @@
 | Keycloak | http://127.0.0.1:8080 | 200 |
 | pgAdmin | http://127.0.0.1:5050 | 200 |
 
-## Runtime Status — Production (89.169.178.103)
+## Runtime Status — Production (darba.pro / 89.169.178.103)
 
 | Endpoint | URL | Status |
 |----------|-----|--------|
-| Frontend | http://89.169.178.103 | 200 |
-| API Swagger | http://89.169.178.103/api/docs | 200 |
+| Frontend | https://darba.pro | 200 |
+| API Health | https://darba.pro/api/health | OK |
+| API Swagger | https://darba.pro/api/docs | 200 |
 | Keycloak | http://89.169.178.103:8080 | 200 |
 | pgAdmin | http://89.169.178.103:5050 | 200 |
+| HTTP redirect | http://darba.pro | 301 -> https |
 
 ## Test Coverage
 
@@ -76,5 +78,5 @@ Priority: write tests before production launch.
 5. Error handling could be more granular (NestJS exception filters)
 6. No logging framework (just console)
 7. No monitoring/alerting setup
-8. HTTPS/SSL not configured (certbot ready, waiting DNS)
+8. ~~HTTPS/SSL~~ — DONE (Let's Encrypt, auto-renew)
 9. Keycloak and pgAdmin exposed on public ports without auth proxy
