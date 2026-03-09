@@ -24,7 +24,7 @@ function getKeycloakBase() {
   return `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect`;
 }
 
-export type SocialProvider = "google" | "vk" | "facebook" | "apple";
+export type SocialProvider = "google" | "vk" | "facebook" | "apple" | "instagram";
 
 export async function login(provider?: SocialProvider) {
   const { verifier, challenge } = await generatePKCE();

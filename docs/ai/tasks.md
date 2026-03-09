@@ -26,7 +26,7 @@
 ## Medium Priority — ALL DONE
 
 - [x] Auto-posting to social networks (VK wall + Telegram channel, shareToVk/shareToTelegram flags)
-- [x] Social login via Keycloak Identity Providers (Google, VK, Facebook, Apple + login page)
+- [x] Social login via Keycloak Identity Providers (Google, VK, Facebook, Apple, Instagram + login page)
 - [x] Telegram channel posting (TelegramPostingService, channel config UI)
 - [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
 - [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
@@ -44,7 +44,7 @@
 - [ ] Recommendation system (pgvector similarity search)
 - [ ] A/B testing framework
 - [ ] White-label onboarding wizard
-- [ ] Instagram OAuth integration
+- [x] Instagram OAuth integration (Keycloak built-in IdP + login page button)
 - [ ] User Telegram bot (per-user bot instances)
 - [x] Monitoring: detailed health endpoint (/api/health/detailed — DB, memory, uptime)
 
