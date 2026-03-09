@@ -2,12 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { SanitizePipe } from './common/sanitize.pipe';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Global validation
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+  // Global validation + sanitization
+  app.useGlobalPipes(new SanitizePipe(), new ValidationPipe({ whitelist: true, transform: true }));
 
   // CORS
   const allowedOrigins = (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000')

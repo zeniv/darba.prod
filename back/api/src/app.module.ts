@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { BullModule } from '@nestjs/bull';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller';
 import { PrismaModule } from './prisma/prisma.module';
@@ -32,6 +33,10 @@ import { SetupModule } from './setup/setup.module';
         port: parseInt(process.env.REDIS_PORT || '6379', 10),
       },
     }),
+    ThrottlerModule.forRoot([
+      { name: 'short', ttl: 1000, limit: 10 },   // 10 req/sec
+      { name: 'medium', ttl: 60000, limit: 100 }, // 100 req/min
+    ]),
     PrismaModule,
     StorageModule,
     AuthModule,
@@ -53,6 +58,10 @@ import { SetupModule } from './setup/setup.module';
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })

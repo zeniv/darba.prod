@@ -9,6 +9,7 @@ import {
   RawBodyRequest,
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
+import { SkipThrottle } from '@nestjs/throttler';
 import { PaymentsService } from './payments.service';
 import { TokenService } from './token.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
@@ -61,6 +62,7 @@ export class PaymentsController {
 
   @Post('webhook/yookassa')
   @Public()
+  @SkipThrottle()
   @ApiOperation({ summary: 'Webhook ЮКасса' })
   async webhookYookassa(@Body() body: any, @Headers() headers: Record<string, string>) {
     return this.paymentsService.handleWebhook('yookassa', body, headers);
@@ -68,6 +70,7 @@ export class PaymentsController {
 
   @Post('webhook/stripe')
   @Public()
+  @SkipThrottle()
   @ApiOperation({ summary: 'Webhook Stripe' })
   async webhookStripe(@Body() body: any, @Headers() headers: Record<string, string>) {
     return this.paymentsService.handleWebhook('stripe', body, headers);

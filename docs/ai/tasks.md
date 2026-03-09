@@ -17,7 +17,7 @@
 
 - [x] End-to-end auth flow (Keycloak OIDC + PKCE, JWKS verification, AuthProvider)
 - [x] First launch admin wizard — SetupModule (/api/setup/status + /api/setup/init)
-- [ ] Seed default CMS pages (offer, disclaimer)
+- [x] Seed default CMS pages (offer, privacy, disclaimer via prisma/seed.ts)
 - [x] CORS configuration for production domain (CORS_ORIGINS env var)
 - [x] HTTPS/SSL setup (nginx + certbot, auto-renew cron)
 - [x] Webhook signature verification (Stripe HMAC-SHA256, YooKassa API verify)
@@ -26,9 +26,9 @@
 ## Medium Priority
 
 - [ ] Auto-posting to social networks (VK wall post)
-- [ ] Email notifications (SMTP integration in NotificationsService)
-- [ ] Rate limiting on API endpoints
-- [ ] Input sanitization audit (XSS prevention)
+- [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
+- [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
+- [x] Input sanitization (SanitizePipe strips HTML tags globally)
 - [ ] File upload size limits and validation
 - [ ] Proper error handling middleware (NestJS exception filters)
 - [ ] Write unit tests (at least for critical services)

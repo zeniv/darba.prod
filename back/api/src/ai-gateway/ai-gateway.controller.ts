@@ -1,5 +1,6 @@
 import { Controller, Post, Get, Body, Param, Req } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiExcludeEndpoint } from '@nestjs/swagger';
+import { Throttle, SkipThrottle } from '@nestjs/throttler';
 import { AiGatewayService } from './ai-gateway.service';
 import { AiRunDto } from './ai-run.dto';
 import { Public } from '../auth/public.decorator';
@@ -11,6 +12,7 @@ export class AiGatewayController {
 
   @Post('run')
   @ApiBearerAuth()
+  @Throttle({ short: { ttl: 1000, limit: 2 }, medium: { ttl: 60000, limit: 20 } })
   @ApiOperation({ summary: 'Запустить AI-задачу' })
   async run(@Req() req: any, @Body() dto: AiRunDto) {
     const user = req.user;
@@ -35,6 +37,7 @@ export class AiGatewayController {
 
   @Post('callback/complete')
   @Public()
+  @SkipThrottle()
   @ApiExcludeEndpoint()
   async callbackComplete(
     @Body() body: { taskId: string; result: string; mediaUrl?: string },
@@ -44,6 +47,7 @@ export class AiGatewayController {
 
   @Post('callback/fail')
   @Public()
+  @SkipThrottle()
   @ApiExcludeEndpoint()
   async callbackFail(
     @Body() body: { taskId: string; error: string },
