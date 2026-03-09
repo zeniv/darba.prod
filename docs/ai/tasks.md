@@ -31,7 +31,7 @@
 - [x] Input sanitization (SanitizePipe strips HTML tags globally)
 - [x] File upload size limits and validation (Multer configs + Express body 1MB limit)
 - [x] Proper error handling middleware (AllExceptionsFilter, structured JSON errors)
-- [ ] Write unit tests (at least for critical services)
+- [x] Write unit tests (28 tests: SanitizePipe, ExceptionFilter, UsersService, SetupController, EmailService)
 - [x] Logging framework (NestJS Logger, RequestLoggerMiddleware, env-based log levels)
 
 ## Low Priority / Future
