@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react";
-import { getToken, isLoggedIn, login, logout, refreshToken, parseTokenPayload, type SocialProvider } from "@/lib/auth";
+import { getToken, isLoggedIn, login, logout, refreshToken, parseTokenPayload } from "@/lib/auth";
 
 interface User {
   email: string;
@@ -13,7 +13,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  login: (provider?: SocialProvider) => Promise<void>;
+  login: (provider?: string) => Promise<void>;
   logout: () => void;
 }
 
