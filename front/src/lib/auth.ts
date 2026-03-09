@@ -6,8 +6,9 @@ const TOKEN_KEY = "darba_token";
 const REFRESH_KEY = "darba_refresh";
 const VERIFIER_KEY = "darba_pkce_verifier";
 
-function base64urlEncode(buffer: ArrayBuffer): string {
-  return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+function base64urlEncode(data: ArrayBuffer | Uint8Array): string {
+  const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
+  return btoa(String.fromCharCode(...bytes))
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=+$/, "");
