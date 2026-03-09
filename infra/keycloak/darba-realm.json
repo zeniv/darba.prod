@@ -104,6 +104,18 @@
         "fetchedFields": "photo_200,screen_name",
         "syncMode": "IMPORT"
       }
+    },
+    {
+      "alias": "instagram",
+      "providerId": "instagram",
+      "enabled": false,
+      "trustEmail": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "CHANGE_ME",
+        "clientSecret": "CHANGE_ME",
+        "syncMode": "IMPORT"
+      }
     }
   ],
   "identityProviderMappers": [
