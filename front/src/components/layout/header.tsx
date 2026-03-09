@@ -71,10 +71,12 @@ export function Header({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
             </Button>
           </>
         ) : (
-          <Button variant="ghost" size="sm" className="gap-2 ml-1" onClick={login}>
-            <LogIn className="h-4 w-4" />
-            <span className="hidden sm:inline text-sm">Войти</span>
-          </Button>
+          <Link href="/login">
+            <Button variant="ghost" size="sm" className="gap-2 ml-1">
+              <LogIn className="h-4 w-4" />
+              <span className="hidden sm:inline text-sm">Войти</span>
+            </Button>
+          </Link>
         )}
       </div>
     </header>

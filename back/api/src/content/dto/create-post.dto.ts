@@ -46,6 +46,11 @@ export class CreatePostDto {
   @IsBoolean()
   @IsOptional()
   shareToVk?: boolean;
+
+  @ApiPropertyOptional({ description: 'Опубликовать в Telegram-канал', default: false })
+  @IsBoolean()
+  @IsOptional()
+  shareToTelegram?: boolean;
 }
 
 export class UpdatePostDto {

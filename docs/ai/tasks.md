@@ -23,9 +23,11 @@
 - [x] Webhook signature verification (Stripe HMAC-SHA256, YooKassa API verify)
 - [x] Fix NODE_ENV warning — changed from "local" to "development"
 
-## Medium Priority
+## Medium Priority — ALL DONE
 
-- [x] Auto-posting to social networks (VkPostingService: wall.post + photo upload, shareToVk flag)
+- [x] Auto-posting to social networks (VK wall + Telegram channel, shareToVk/shareToTelegram flags)
+- [x] Social login via Keycloak Identity Providers (Google, VK, Facebook, Apple + login page)
+- [x] Telegram channel posting (TelegramPostingService, channel config UI)
 - [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
 - [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
 - [x] Input sanitization (SanitizePipe strips HTML tags globally)
