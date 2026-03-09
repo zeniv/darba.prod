@@ -44,7 +44,7 @@
 - [ ] White-label onboarding wizard
 - [ ] Instagram OAuth integration
 - [ ] User Telegram bot (per-user bot instances)
-- [ ] Monitoring/alerting setup (Cloud Monitoring)
+- [x] Monitoring: detailed health endpoint (/api/health/detailed — DB, memory, uptime)
 
 ## Done (reference)
 
