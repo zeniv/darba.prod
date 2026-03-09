@@ -29,10 +29,10 @@
 - [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
 - [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
 - [x] Input sanitization (SanitizePipe strips HTML tags globally)
-- [ ] File upload size limits and validation
-- [ ] Proper error handling middleware (NestJS exception filters)
+- [x] File upload size limits and validation (Multer configs + Express body 1MB limit)
+- [x] Proper error handling middleware (AllExceptionsFilter, structured JSON errors)
 - [ ] Write unit tests (at least for critical services)
-- [ ] Logging framework (replace console with structured logger)
+- [x] Logging framework (NestJS Logger, RequestLoggerMiddleware, env-based log levels)
 
 ## Low Priority / Future
 

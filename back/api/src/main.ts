@@ -1,11 +1,23 @@
 import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { SanitizePipe } from './common/sanitize.pipe';
+import { AllExceptionsFilter } from './common/http-exception.filter';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const isProd = process.env.NODE_ENV === 'production';
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: isProd ? ['error', 'warn', 'log'] : ['error', 'warn', 'log', 'debug', 'verbose'],
+  });
+
+  // Body size limits
+  app.useBodyParser('json', { limit: '1mb' });
+  app.useBodyParser('urlencoded', { limit: '1mb', extended: true });
+
+  // Global exception filter
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   // Global validation + sanitization
   app.useGlobalPipes(new SanitizePipe(), new ValidationPipe({ whitelist: true, transform: true }));
@@ -34,7 +46,8 @@ async function bootstrap() {
 
   const port = process.env.PORT || 8000;
   await app.listen(port);
-  console.log(`[Darba API] Running on http://localhost:${port}`);
-  console.log(`[Darba API] Swagger: http://localhost:${port}/api/docs`);
+  const logger = new Logger('Bootstrap');
+  logger.log(`Darba API running on http://localhost:${port}`);
+  logger.log(`Swagger: http://localhost:${port}/api/docs`);
 }
 bootstrap();
