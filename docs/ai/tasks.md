@@ -15,13 +15,13 @@
 
 ## High Priority (Pre-Production)
 
-- [ ] End-to-end auth flow testing (Keycloak → NestJS → Frontend)
-- [ ] First launch admin wizard — auto-create admin account on empty DB
+- [x] End-to-end auth flow (Keycloak OIDC + PKCE, JWKS verification, AuthProvider)
+- [x] First launch admin wizard — SetupModule (/api/setup/status + /api/setup/init)
 - [ ] Seed default CMS pages (offer, disclaimer)
-- [ ] CORS configuration for production domain
-- [ ] HTTPS/SSL setup (nginx + certbot or Cloud Run)
-- [ ] Webhook signature verification (YooKassa, Stripe)
-- [ ] Fix NODE_ENV warning — Next.js 16 expects "development", not "local"
+- [x] CORS configuration for production domain (CORS_ORIGINS env var)
+- [x] HTTPS/SSL setup (nginx + certbot, auto-renew cron)
+- [x] Webhook signature verification (Stripe HMAC-SHA256, YooKassa API verify)
+- [x] Fix NODE_ENV warning — changed from "local" to "development"
 
 ## Medium Priority
 

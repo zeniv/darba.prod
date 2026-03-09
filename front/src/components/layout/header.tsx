@@ -1,13 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Globe, LogIn, Moon, Sun, Menu } from "lucide-react";
+import { Bell, Globe, LogIn, LogOut, Moon, Sun, Menu, User } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth-provider";
 
 export function Header({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
   const { theme, setTheme } = useTheme();
+  const { user, login, logout } = useAuth();
   const [notificationCount] = useState(0);
 
   return (
@@ -56,10 +58,24 @@ export function Header({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
         </Button>
 
         {/* Auth */}
-        <Button variant="ghost" size="sm" className="gap-2 ml-1">
-          <LogIn className="h-4 w-4" />
-          <span className="hidden sm:inline text-sm">Войти</span>
-        </Button>
+        {user ? (
+          <>
+            <Link href="/profile">
+              <Button variant="ghost" size="sm" className="gap-2 ml-1">
+                <User className="h-4 w-4" />
+                <span className="hidden sm:inline text-sm">{user.name}</span>
+              </Button>
+            </Link>
+            <Button variant="ghost" size="icon" onClick={logout}>
+              <LogOut className="h-4 w-4" />
+            </Button>
+          </>
+        ) : (
+          <Button variant="ghost" size="sm" className="gap-2 ml-1" onClick={login}>
+            <LogIn className="h-4 w-4" />
+            <span className="hidden sm:inline text-sm">Войти</span>
+          </Button>
+        )}
       </div>
     </header>
   );

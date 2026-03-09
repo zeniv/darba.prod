@@ -8,7 +8,12 @@ import { Logger } from '@nestjs/common';
 import { Server, Socket } from 'socket.io';
 
 @WebSocketGateway({
-  cors: { origin: '*' },
+  cors: {
+    origin: (process.env.CORS_ORIGINS || process.env.APP_URL || 'http://localhost:3000')
+      .split(',')
+      .map((o) => o.trim()),
+    credentials: true,
+  },
   namespace: '/ws',
 })
 export class NotificationsGateway

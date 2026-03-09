@@ -1,5 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { createHmac, timingSafeEqual } from 'crypto';
 import type {
   PaymentProvider,
   CreatePaymentParams,
@@ -62,7 +63,9 @@ export class StripeProvider implements PaymentProvider {
   }
 
   async parseWebhook(body: any, headers: Record<string, string>): Promise<WebhookEvent> {
-    // TODO: Verify webhook signature using this.webhookSecret + headers['stripe-signature']
+    if (this.webhookSecret) {
+      this.verifyStripeSignature(body, headers['stripe-signature']);
+    }
     const event = body;
     const obj = event.data?.object;
 
@@ -79,5 +82,35 @@ export class StripeProvider implements PaymentProvider {
       currency: (obj?.currency || 'usd').toUpperCase(),
       metadata: obj?.metadata || {},
     };
+  }
+
+  private verifyStripeSignature(body: any, signature: string | undefined): void {
+    if (!signature) {
+      throw new UnauthorizedException('Missing stripe-signature header');
+    }
+    const payload = JSON.stringify(body);
+    const parts = Object.fromEntries(
+      signature.split(',').map((p) => {
+        const [k, v] = p.split('=');
+        return [k, v];
+      }),
+    );
+    const timestamp = parts['t'];
+    const expectedSig = parts['v1'];
+    if (!timestamp || !expectedSig) {
+      throw new UnauthorizedException('Invalid stripe-signature format');
+    }
+    // Reject timestamps older than 5 minutes (replay protection)
+    if (Math.abs(Date.now() / 1000 - parseInt(timestamp)) > 300) {
+      throw new UnauthorizedException('Webhook timestamp too old');
+    }
+    const signedPayload = `${timestamp}.${payload}`;
+    const computed = createHmac('sha256', this.webhookSecret)
+      .update(signedPayload)
+      .digest('hex');
+    if (!timingSafeEqual(Buffer.from(computed), Buffer.from(expectedSig))) {
+      throw new UnauthorizedException('Invalid webhook signature');
+    }
+    this.logger.log('Stripe webhook signature verified');
   }
 }
