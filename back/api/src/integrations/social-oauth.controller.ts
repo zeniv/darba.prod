@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Delete, Query, Param, Req } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Query, Param, Req, Body } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { SocialOAuthService } from './social-oauth.service';
+import { TelegramPostingService } from './telegram-posting.service';
 import { ConfigService } from '@nestjs/config';
 
 @ApiTags('Social OAuth')
@@ -9,6 +10,7 @@ import { ConfigService } from '@nestjs/config';
 export class SocialOAuthController {
   constructor(
     private socialOAuth: SocialOAuthService,
+    private tgPosting: TelegramPostingService,
     private config: ConfigService,
   ) {}
 
@@ -40,6 +42,27 @@ export class SocialOAuthController {
   @Delete(':provider')
   @ApiOperation({ summary: 'Отключить соцсеть' })
   async disconnect(@Param('provider') provider: string, @Req() req: any) {
+    if (provider === 'telegram_channel') {
+      return this.tgPosting.removeConfig(req.user.userId);
+    }
     return this.socialOAuth.disconnect(req.user.userId, provider);
+  }
+
+  // --- Telegram Channel ---
+
+  @Post('telegram-channel')
+  @ApiOperation({ summary: 'Подключить Telegram-канал' })
+  async connectTelegramChannel(
+    @Req() req: any,
+    @Body() body: { botToken: string; channelId: string },
+  ) {
+    await this.tgPosting.saveConfig(req.user.userId, body.botToken, body.channelId);
+    return { ok: true, provider: 'telegram_channel' };
+  }
+
+  @Post('telegram-channel/test')
+  @ApiOperation({ summary: 'Тест подключения Telegram-канала' })
+  async testTelegramChannel(@Body() body: { botToken: string; channelId: string }) {
+    return this.tgPosting.testConnection(body.botToken, body.channelId);
   }
 }

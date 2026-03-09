@@ -69,8 +69,9 @@ services:
       - darba
 
   keycloak:
-    image: quay.io/keycloak/keycloak:23.0
-    command: start-dev --import-realm
+    build:
+      context: ./infra/keycloak
+      dockerfile: Dockerfile
     env_file:
       - ./back/.env
     environment:

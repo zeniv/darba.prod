@@ -24,7 +24,9 @@ function getKeycloakBase() {
   return `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect`;
 }
 
-export async function login() {
+export type SocialProvider = "google" | "vk" | "facebook" | "apple";
+
+export async function login(provider?: SocialProvider) {
   const { verifier, challenge } = await generatePKCE();
   sessionStorage.setItem(VERIFIER_KEY, verifier);
 
@@ -36,6 +38,11 @@ export async function login() {
     code_challenge: challenge,
     code_challenge_method: "S256",
   });
+
+  // kc_idp_hint skips Keycloak login form, redirects to IdP directly
+  if (provider) {
+    params.set("kc_idp_hint", provider);
+  }
 
   window.location.href = `${getKeycloakBase()}/auth?${params}`;
 }

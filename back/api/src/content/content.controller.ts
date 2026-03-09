@@ -4,6 +4,7 @@ import { ContentService } from './content.service';
 import { CreatePostDto, UpdatePostDto } from './dto/create-post.dto';
 import { Public } from '../auth/public.decorator';
 import { VkPostingService } from '../integrations/vk-posting.service';
+import { TelegramPostingService } from '../integrations/telegram-posting.service';
 
 @ApiTags('Content')
 @Controller('posts')
@@ -13,18 +14,22 @@ export class ContentController {
   constructor(
     private contentService: ContentService,
     private vkPosting: VkPostingService,
+    private tgPosting: TelegramPostingService,
   ) {}
 
   @Post()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Создать публикацию' })
   async create(@Req() req: any, @Body() dto: CreatePostDto) {
-    const { shareToVk, ...postData } = dto;
+    const { shareToVk, shareToTelegram, ...postData } = dto;
     const post = await this.contentService.create(req.user.userId, postData);
 
-    // Auto-post to VK (fire-and-forget)
+    // Auto-post to social (fire-and-forget)
     if (shareToVk) {
       this.shareToVk(req.user.userId, post).catch(() => {});
+    }
+    if (shareToTelegram) {
+      this.shareToTelegram(req.user.userId, post).catch(() => {});
     }
 
     return post;
@@ -45,6 +50,17 @@ export class ContentController {
     const result = await this.vkPosting.postToWall(userId, message, attachments);
     if (result.ok) {
       this.logger.log(`VK auto-post: postId=${result.postId} for user ${userId}`);
+    }
+  }
+
+  private async shareToTelegram(userId: string, post: any) {
+    const text = [post.title, post.content].filter(Boolean).join('\n\n');
+    const message = text || 'Новая публикация в Darba';
+    const imageUrl = post.mediaUrls?.[0] && post.mediaType === 'image' ? post.mediaUrls[0] : undefined;
+
+    const result = await this.tgPosting.postToChannel(userId, message, imageUrl);
+    if (result.ok) {
+      this.logger.log(`Telegram auto-post: messageId=${result.messageId} for user ${userId}`);
     }
   }
 

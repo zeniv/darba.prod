@@ -53,6 +53,80 @@
       "protocol": "openid-connect"
     }
   ],
-  "identityProviders": [],
+  "identityProviders": [
+    {
+      "alias": "google",
+      "providerId": "google",
+      "enabled": false,
+      "trustEmail": true,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "CHANGE_ME",
+        "clientSecret": "CHANGE_ME",
+        "defaultScope": "openid email profile",
+        "syncMode": "IMPORT"
+      }
+    },
+    {
+      "alias": "facebook",
+      "providerId": "facebook",
+      "enabled": false,
+      "trustEmail": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "CHANGE_ME",
+        "clientSecret": "CHANGE_ME",
+        "defaultScope": "email,public_profile",
+        "syncMode": "IMPORT"
+      }
+    },
+    {
+      "alias": "apple",
+      "providerId": "apple",
+      "enabled": false,
+      "trustEmail": true,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "CHANGE_ME",
+        "clientSecret": "CHANGE_ME",
+        "syncMode": "IMPORT"
+      }
+    },
+    {
+      "alias": "vk",
+      "providerId": "vk",
+      "enabled": false,
+      "trustEmail": false,
+      "firstBrokerLoginFlowAlias": "first broker login",
+      "config": {
+        "clientId": "CHANGE_ME",
+        "clientSecret": "CHANGE_ME",
+        "fetchedFields": "photo_200,screen_name",
+        "syncMode": "IMPORT"
+      }
+    }
+  ],
+  "identityProviderMappers": [
+    {
+      "name": "vk-username",
+      "identityProviderAlias": "vk",
+      "identityProviderMapper": "hardcoded-attribute-idp-mapper",
+      "config": {
+        "attribute": "idp",
+        "attribute.value": "vk",
+        "syncMode": "INHERIT"
+      }
+    },
+    {
+      "name": "google-username",
+      "identityProviderAlias": "google",
+      "identityProviderMapper": "hardcoded-attribute-idp-mapper",
+      "config": {
+        "attribute": "idp",
+        "attribute.value": "google",
+        "syncMode": "INHERIT"
+      }
+    }
+  ],
   "smtpServer": {}
 }
