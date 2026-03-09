@@ -25,7 +25,7 @@
 
 ## Medium Priority
 
-- [ ] Auto-posting to social networks (VK wall post)
+- [x] Auto-posting to social networks (VkPostingService: wall.post + photo upload, shareToVk flag)
 - [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
 - [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
 - [x] Input sanitization (SanitizePipe strips HTML tags globally)

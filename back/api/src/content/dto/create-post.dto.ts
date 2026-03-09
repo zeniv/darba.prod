@@ -41,6 +41,11 @@ export class CreatePostDto {
   @IsString({ each: true })
   @IsOptional()
   tags?: string[];
+
+  @ApiPropertyOptional({ description: 'Опубликовать на стене VK', default: false })
+  @IsBoolean()
+  @IsOptional()
+  shareToVk?: boolean;
 }
 
 export class UpdatePostDto {

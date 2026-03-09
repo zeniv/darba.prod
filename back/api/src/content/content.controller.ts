@@ -1,19 +1,51 @@
-import { Controller, Post, Get, Patch, Delete, Body, Param, Query, Req } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Body, Param, Query, Req, Logger } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { ContentService } from './content.service';
 import { CreatePostDto, UpdatePostDto } from './dto/create-post.dto';
 import { Public } from '../auth/public.decorator';
+import { VkPostingService } from '../integrations/vk-posting.service';
 
 @ApiTags('Content')
 @Controller('posts')
 export class ContentController {
-  constructor(private contentService: ContentService) {}
+  private readonly logger = new Logger(ContentController.name);
+
+  constructor(
+    private contentService: ContentService,
+    private vkPosting: VkPostingService,
+  ) {}
 
   @Post()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Создать публикацию' })
   async create(@Req() req: any, @Body() dto: CreatePostDto) {
-    return this.contentService.create(req.user.userId, dto);
+    const { shareToVk, ...postData } = dto;
+    const post = await this.contentService.create(req.user.userId, postData);
+
+    // Auto-post to VK (fire-and-forget)
+    if (shareToVk) {
+      this.shareToVk(req.user.userId, post).catch(() => {});
+    }
+
+    return post;
+  }
+
+  private async shareToVk(userId: string, post: any) {
+    const text = [post.title, post.content].filter(Boolean).join('\n\n');
+    const message = text || 'Новая публикация в Darba';
+
+    const attachments: string[] = [];
+    if (post.mediaUrls?.length && post.mediaType === 'image') {
+      for (const url of post.mediaUrls.slice(0, 4)) {
+        const att = await this.vkPosting.uploadPhoto(userId, url);
+        if (att) attachments.push(att);
+      }
+    }
+
+    const result = await this.vkPosting.postToWall(userId, message, attachments);
+    if (result.ok) {
+      this.logger.log(`VK auto-post: postId=${result.postId} for user ${userId}`);
+    }
   }
 
   @Get('feed')
