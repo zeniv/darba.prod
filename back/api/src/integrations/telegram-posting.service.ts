@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { IntegrationsService } from './integrations.service';
 
 const TG_API = 'https://api.telegram.org/bot';
 
@@ -18,7 +19,10 @@ interface TgChannelConfig {
 export class TelegramPostingService {
   private readonly logger = new Logger(TelegramPostingService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private integrations: IntegrationsService,
+  ) {}
 
   /** Post text message to user's Telegram channel */
   async postToChannel(
@@ -78,12 +82,13 @@ export class TelegramPostingService {
     return !!(await this.getChannelConfig(userId));
   }
 
-  /** Save channel config for user */
+  /** Save channel config for user (bot token encrypted at rest) */
   async saveConfig(userId: string, botToken: string, channelId: string) {
+    const encrypted = this.integrations.encrypt(botToken);
     return this.prisma.userIntegration.upsert({
       where: { userId_type_provider: { userId, type: 'social', provider: 'telegram_channel' } },
       update: {
-        encryptedKey: botToken,
+        encryptedKey: encrypted,
         metadata: { channelId },
         isActive: true,
       },
@@ -91,7 +96,7 @@ export class TelegramPostingService {
         userId,
         type: 'social',
         provider: 'telegram_channel',
-        encryptedKey: botToken,
+        encryptedKey: encrypted,
         metadata: { channelId },
       },
     });
@@ -154,9 +159,13 @@ export class TelegramPostingService {
     if (!integration?.isActive || !integration.encryptedKey) return null;
 
     const metadata = integration.metadata as any;
-    return {
-      botToken: integration.encryptedKey,
-      channelId: metadata?.channelId,
-    };
+    let botToken: string;
+    try {
+      botToken = this.integrations.decrypt(integration.encryptedKey);
+    } catch {
+      // Fallback for unencrypted legacy tokens
+      botToken = integration.encryptedKey;
+    }
+    return { botToken, channelId: metadata?.channelId };
   }
 }

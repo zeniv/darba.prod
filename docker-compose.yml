@@ -47,6 +47,12 @@ services:
         condition: service_healthy
       keycloak:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8000/api/health || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     restart: unless-stopped
     networks:
       - darba
@@ -86,8 +92,10 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8080:8080"
+    # Port 8080 internal only — accessed via nginx /auth/ proxy
+    # For local dev access: uncomment ports below
+    # ports:
+    #   - "8080:8080"
     restart: unless-stopped
     networks:
       - darba
@@ -117,8 +125,9 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@darba.pro}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-darba}
       - PGADMIN_LISTEN_PORT=5050
+    # Port 5050 bound to localhost only — not accessible from outside
     ports:
-      - "5050:5050"
+      - "127.0.0.1:5050:5050"
     depends_on:
       postgres:
         condition: service_healthy

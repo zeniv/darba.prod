@@ -9,10 +9,9 @@ on:
 
 jobs:
   deploy:
-    name: Deploy to ${{ github.event_name == 'pull_request' && 'main' || github.ref_name }}
+    name: Deploy to Production
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event.pull_request.merged == true
-    environment: ${{ github.event_name == 'pull_request' && 'main' || github.ref_name }}
 
     steps:
       - name: Deploy via SSH
@@ -23,7 +22,22 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /home/zzzeniv/darba
-            git pull origin dev
-            docker compose -p darba up -d --build --remove-orphans
+
+            # Pull the branch that triggered the deploy
+            if [ "${{ github.event_name }}" = "pull_request" ]; then
+              git pull origin main
+            else
+              git pull origin dev
+            fi
+
+            # Rebuild and restart services
+            docker compose up -d --build --remove-orphans
             docker image prune -f
-            echo "Deploy complete: $(date)"
+
+            # Verify API health
+            sleep 10
+            if docker compose exec -T api wget -qO- http://localhost:8000/api/health > /dev/null 2>&1; then
+              echo "Deploy OK: API healthy ($(date))"
+            else
+              echo "WARNING: API health check failed ($(date))"
+            fi

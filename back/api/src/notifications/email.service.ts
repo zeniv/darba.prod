@@ -12,18 +12,21 @@ export class EmailService {
     this.from = this.config.get('EMAIL_FROM', 'noreply@darba.pro');
     const host = this.config.get('SMTP_HOST');
     if (host) {
+      const port = parseInt(this.config.get('SMTP_PORT', '587'), 10);
       this.transporter = createTransport({
         host,
-        port: parseInt(this.config.get('SMTP_PORT', '587'), 10),
-        secure: false,
+        port,
+        secure: port === 465, // TLS on 465, STARTTLS on 587
         auth: {
           user: this.config.get('SMTP_USER'),
           pass: this.config.get('SMTP_PASSWORD'),
         },
       });
-      this.logger.log(`SMTP configured: ${host}`);
+      this.transporter.verify()
+        .then(() => this.logger.log(`SMTP connected: ${host}:${port}`))
+        .catch((err) => this.logger.error(`SMTP verify failed: ${err.message}`));
     } else {
-      this.logger.warn('SMTP not configured — emails will be logged only');
+      this.logger.warn('SMTP not configured — emails will be logged only (set SMTP_HOST)');
     }
   }
 
