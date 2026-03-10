@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { IntegrationsService } from './integrations.service';
 
 const VK_API_VERSION = '5.199';
 const VK_API_URL = 'https://api.vk.com/method';
@@ -14,7 +15,10 @@ interface VkWallPostResult {
 export class VkPostingService {
   private readonly logger = new Logger(VkPostingService.name);
 
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private integrations: IntegrationsService,
+  ) {}
 
   /** Post to user's VK wall */
   async postToWall(
@@ -117,6 +121,11 @@ export class VkPostingService {
       where: { userId_type_provider: { userId, type: 'social', provider: 'vk' } },
     });
     if (!integration?.isActive || !integration.encryptedKey) return null;
-    return integration.encryptedKey;
+    try {
+      return this.integrations.decrypt(integration.encryptedKey);
+    } catch {
+      // Fallback for unencrypted legacy tokens
+      return integration.encryptedKey;
+    }
   }
 }

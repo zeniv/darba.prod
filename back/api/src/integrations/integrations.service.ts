@@ -18,14 +18,14 @@ export class IntegrationsService {
       : randomBytes(32);
   }
 
-  private encrypt(text: string): string {
+  encrypt(text: string): string {
     const iv = randomBytes(16);
     const cipher = createCipheriv('aes-256-cbc', this.encryptionKey, iv);
     const encrypted = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
     return iv.toString('hex') + ':' + encrypted.toString('hex');
   }
 
-  private decrypt(encrypted: string): string {
+  decrypt(encrypted: string): string {
     const [ivHex, dataHex] = encrypted.split(':');
     const iv = Buffer.from(ivHex, 'hex');
     const data = Buffer.from(dataHex, 'hex');

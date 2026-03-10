@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { IntegrationsService } from './integrations.service';
 
 interface OAuthTokens {
   accessToken: string;
@@ -15,6 +16,7 @@ export class SocialOAuthService {
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
+    private integrations: IntegrationsService,
   ) {}
 
   /** Get VK OAuth authorization URL */
@@ -54,19 +56,24 @@ export class SocialOAuthService {
     tokens: OAuthTokens,
     metadata?: Record<string, any>,
   ) {
+    const encryptedAccess = this.integrations.encrypt(tokens.accessToken);
+    const encryptedRefresh = tokens.refreshToken
+      ? this.integrations.encrypt(tokens.refreshToken)
+      : undefined;
+
     return this.prisma.userIntegration.upsert({
       where: { userId_type_provider: { userId, type: 'social', provider } },
       update: {
-        encryptedKey: tokens.accessToken, // TODO: encrypt
-        metadata: { ...metadata, refreshToken: tokens.refreshToken },
+        encryptedKey: encryptedAccess,
+        metadata: { ...metadata, refreshToken: encryptedRefresh },
         isActive: true,
       },
       create: {
         userId,
         type: 'social',
         provider,
-        encryptedKey: tokens.accessToken,
-        metadata: { ...metadata, refreshToken: tokens.refreshToken },
+        encryptedKey: encryptedAccess,
+        metadata: { ...metadata, refreshToken: encryptedRefresh },
       },
     });
   }
