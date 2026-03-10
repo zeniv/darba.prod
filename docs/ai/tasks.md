@@ -13,7 +13,7 @@
 - [x] CI/CD workflows (ci.yml + deploy.yml)
 - [x] Branch strategy: dev (default) + main (stable, PR-only)
 
-## High Priority (Pre-Production)
+## High Priority (Pre-Production) — ALL DONE
 
 - [x] End-to-end auth flow (Keycloak OIDC + PKCE, JWKS verification, AuthProvider)
 - [x] First launch admin wizard — SetupModule (/api/setup/status + /api/setup/init)
@@ -27,6 +27,7 @@
 
 - [x] Auto-posting to social networks (VK wall + Telegram channel, shareToVk/shareToTelegram flags)
 - [x] Social login via Keycloak Identity Providers (Google, VK, Facebook, Apple, Instagram + login page)
+- [x] Dynamic login providers (GET /api/auth/providers — fetches enabled IdPs from Keycloak, 5 min cache)
 - [x] Telegram channel posting (TelegramPostingService, channel config UI)
 - [x] Email notifications (EmailService + nodemailer, dry-run without SMTP)
 - [x] Rate limiting (@nestjs/throttler: 10/sec, 100/min global; 2/sec, 20/min AI)
@@ -35,6 +36,43 @@
 - [x] Proper error handling middleware (AllExceptionsFilter, structured JSON errors)
 - [x] Write unit tests (28 tests: SanitizePipe, ExceptionFilter, UsersService, SetupController, EmailService)
 - [x] Logging framework (NestJS Logger, RequestLoggerMiddleware, env-based log levels)
+- [x] Instagram OAuth integration (Keycloak built-in IdP + login page button)
+- [x] Monitoring: detailed health endpoint (/api/health/detailed — DB, memory, uptime)
+
+## Next Steps — Production Readiness
+
+### Keycloak Configuration (manual, in Admin Console)
+- [ ] Configure Google OAuth credentials (clientId/clientSecret in Keycloak)
+- [ ] Configure VK app credentials
+- [ ] Configure Facebook app credentials
+- [ ] Configure Apple Sign-In credentials
+- [ ] Configure Instagram app credentials
+- [ ] Enable desired Identity Providers (login page adapts automatically)
+- [ ] Create darba-frontend client in Keycloak realm
+
+### SMTP / Email
+- [ ] Configure real SMTP server (Yandex.Mail, SendGrid, or Mailgun)
+- [ ] Wire SMTP credentials to EmailService env vars
+- [ ] Test email notifications end-to-end
+
+### Security Hardening
+- [ ] Restrict Keycloak admin port (8080) — nginx auth or firewall
+- [ ] Restrict pgAdmin port (5050) — nginx auth or firewall
+- [ ] Encrypt social OAuth tokens in UserIntegration table
+- [ ] OWASP ZAP security scan
+- [ ] CSP (Content-Security-Policy) headers in nginx
+
+### Testing
+- [ ] E2E tests for auth flow (login -> callback -> token)
+- [ ] E2E tests for payments (create -> webhook -> balance)
+- [ ] Integration tests for AI agent pipeline
+- [ ] Load testing with k6
+
+### DevOps / CI
+- [ ] Automated deploy on PR merge to main (currently manual ssh + pull)
+- [ ] Docker build cache optimization (multi-stage, layer caching)
+- [ ] Health check endpoints in docker-compose (depends_on healthcheck)
+- [ ] Backup strategy for PostgreSQL (pg_dump cron or managed backup)
 
 ## Low Priority / Future
 
@@ -44,9 +82,11 @@
 - [ ] Recommendation system (pgvector similarity search)
 - [ ] A/B testing framework
 - [ ] White-label onboarding wizard
-- [x] Instagram OAuth integration (Keycloak built-in IdP + login page button)
 - [ ] User Telegram bot (per-user bot instances)
-- [x] Monitoring: detailed health endpoint (/api/health/detailed — DB, memory, uptime)
+- [ ] Prometheus + Grafana monitoring
+- [ ] Redis caching for hot endpoints (feed, plans)
+- [ ] CDN for static assets and media files
+- [ ] i18n (next-intl) — multi-language support
 
 ## Done (reference)
 
