@@ -25,6 +25,11 @@ venv/
 postgres_data/
 redis_data/
 
+# Local dev overrides (NOT for production)
+docker-compose.override.yml
+infra/nginx/conf.d.local/
+infra/nginx/conf.d/darba-local.conf
+
 # OS
 .DS_Store
 Thumbs.db
