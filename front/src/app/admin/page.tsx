@@ -21,7 +21,7 @@ function StatCard({
 }: {
   label: string;
   value: string | number;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
 }) {
   return (
     <div className="border border-border rounded-xl p-5">

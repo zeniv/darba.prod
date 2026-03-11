@@ -11,11 +11,17 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   closed: { label: "Закрыт", color: "bg-muted-foreground" },
 };
 
+interface Ticket {
+  id: string;
+  subject: string;
+  status: string;
+}
+
 export default function SupportPage() {
   const [showForm, setShowForm] = useState(false);
 
   // TODO: connect to real API via TanStack Query
-  const tickets: any[] = [];
+  const tickets: Ticket[] = [];
 
   return (
     <AppShell>
@@ -70,7 +76,7 @@ export default function SupportPage() {
             </div>
           ) : (
             <div className="space-y-2">
-              {tickets.map((ticket: any) => {
+              {tickets.map((ticket: Ticket) => {
                 const st = STATUS_LABELS[ticket.status] || STATUS_LABELS.open;
                 return (
                   <div
