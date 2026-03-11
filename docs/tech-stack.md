@@ -1,6 +1,6 @@
 # Tech Stack — обоснование
 
-## Frontend: Next.js 14
+## Frontend: Next.js 16
 
 **Почему Next.js:**
 - App Router — серверные компоненты снижают JS-бандл, улучшают Core Web Vitals
@@ -80,11 +80,12 @@
 
 ## Auth: Keycloak
 
-- OpenID Connect + OAuth2
-- PKCE flow для SPA
-- Social login: Google, Apple (и другие)
-- User federation (LDAP при необходимости)
+- OpenID Connect + OAuth2, PKCE S256
+- Social login: Google, VK, Facebook, Apple, Instagram (Keycloak IdPs)
+- VK через keycloak-russian-providers SPI (v1.0.42 JAR)
+- JWKS верификация RS256 (1h кэш), JWT_SECRET fallback
 - Admin REST API для управления пользователями из /admin
+- Dynamic providers: GET /api/auth/providers (5 min cache)
 - Brute-force защита встроена
 
 ---
@@ -106,13 +107,13 @@
 
 | Компонент | Технология | Обоснование |
 |-----------|-----------|-------------|
-| Контейнеры | Docker + Compose | Стандарт, локальная разработка |
-| Reverse proxy | Nginx | Роутинг, SSL, статика, gzip |
-| CI/CD | GitHub Actions | Нативная интеграция GitHub |
-| Хостинг | Google Cloud Run | Serverless контейнеры, автомасштабирование |
-| БД prod | Google Cloud SQL | Managed PostgreSQL, автобэкапы |
-| Секреты prod | Google Secret Manager | Нет секретов в env файлах на сервере |
-| Мониторинг | Google Cloud Monitoring | Нативная интеграция с Cloud Run |
+| Контейнеры | Docker + Compose | Стандарт, 8 сервисов |
+| Reverse proxy | Nginx | Роутинг, SSL (Let's Encrypt), gzip |
+| CI/CD | GitHub Actions | Lint, typecheck, build + SSH deploy |
+| Хостинг | Yandex Cloud VPS | Ubuntu 22.04, 2 vCPU, 8 GB RAM |
+| БД prod | PostgreSQL + pgvector | Docker volume, ежедневный pg_dump бэкап |
+| Секреты prod | .env на сервере | Не в git, доставка через SSH |
+| SSL | Let's Encrypt + certbot | Auto-renew, HSTS |
 
 ---
 

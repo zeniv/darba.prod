@@ -8,7 +8,8 @@ White-label AI portal with social layer and subscription monetization.
 - Social feed: posts, likes, comments, donations, follows
 - Subscriptions: token-based plans (Free/Max/Pro), YooKassa + Stripe
 - Admin panel: users, CMS, support tickets, settings, analytics
-- Integrations: Telegram bot, VK OAuth, user API keys
+- Integrations: Telegram bot, VK/Telegram auto-posting, user API keys
+- Auth: Keycloak SSO + social login (Google, VK, Facebook, Apple, Instagram)
 
 ## Tech stack
 
@@ -48,9 +49,10 @@ Services start at:
 
 ## Production
 
-- **Server:** Yandex Cloud, Ubuntu 22.04, 89.169.178.103
-- **Domain:** darba.pro (DNS at nic.ru)
-- **Deploy:** push to `dev` auto-deploys via SSH; merge PR to `main` deploys after approval
+- **Server:** Yandex Cloud VPS, Ubuntu 22.04, 2 vCPU, 8 GB RAM
+- **Domain:** darba.pro (SSL: Let's Encrypt, auto-renew)
+- **Deploy:** push to `dev` → CI; merge PR to `main` → SSH deploy
+- **Backups:** PostgreSQL pg_dump daily at 3AM, 7 day retention
 
 ## Project structure
 
@@ -66,10 +68,16 @@ darba/
 └── docker-compose.yml  # 8 services (nginx, frontend, api, ai-worker, keycloak, postgres, redis, pgadmin)
 ```
 
-## Branches
+## Branches & Remotes
 
-- `dev` — development (default), auto-deploy on push
-- `main` — stable, deploy on merged PR only
+- `dev` — development (default), CI on push
+- `main` — stable, deploy on merged PR
+- **origin** (darba.dev), **test** (darba.test), **prod** (darba.prod)
+
+## Status
+
+All 6 phases + post-phase hardening complete. 8 Docker services running.
+28 unit tests passing. 17 PRs merged.
 
 ## License
 

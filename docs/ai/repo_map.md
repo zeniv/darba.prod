@@ -12,6 +12,9 @@ darba/
 │   ├── nginx/nginx.conf            # Main nginx config
 │   ├── nginx/conf.d/darba.conf     # Upstream routing rules
 │   ├── postgres/init.sql           # DB init (pgvector, uuid-ossp)
+│   ├── postgres/backup.sh          # pg_dump daily backup script
+│   ├── postgres/install-cron.sh    # Cron installer for backup on server
+│   ├── keycloak/Dockerfile         # Custom Keycloak with VK SPI JAR
 │   └── keycloak/darba-realm.json   # Keycloak realm import
 ├── docs/                           # Project documentation
 │   ├── architecture.md
@@ -21,10 +24,14 @@ darba/
 │   ├── environments.md
 │   └── ai/                         # AI context files (this folder)
 ├── .github/                        # CI/CD workflows
-├── docker-compose.yml              # Production compose
+├── docker-compose.yml              # Base compose (8 services)
 ├── docker-compose.dev.yml          # Dev overrides (hot reload, debug)
+├── docker-compose.prod.yml         # Prod overrides (resource limits)
+├── docker-compose.override.yml     # Local overrides (gitignored)
 ├── go.bat                          # Windows local start
-└── go.sh                           # Linux local start
+├── go-full.bat                     # Windows full rebuild
+├── go.sh                           # Linux local start
+└── down.bat                        # Windows stop all
 ```
 
 ## Backend API — back/api/src/
@@ -68,16 +75,20 @@ src/
 │   ├── notifications.module.ts
 │   ├── notifications.service.ts    # DB + WebSocket push
 │   ├── notifications.gateway.ts    # Socket.IO at /ws
-│   └── notifications.controller.ts # GET/POST notifications
+│   ├── notifications.controller.ts # GET/POST notifications
+│   └── email.service.ts            # Nodemailer email notifications
 ├── storage/
 │   ├── storage.module.ts           # Global
 │   └── storage.service.ts          # S3/GCS abstraction
 ├── integrations/
 │   ├── integrations.module.ts
 │   ├── integrations.service.ts     # AES-256-CBC encrypt/decrypt API keys
+│   ├── integrations.service.spec.ts # Unit tests
 │   ├── integrations.controller.ts  # POST/GET/DELETE /integrations/keys
 │   ├── social-oauth.service.ts     # VK OAuth flow
 │   ├── social-oauth.controller.ts  # /oauth/vk/*, /oauth/connections
+│   ├── vk-posting.service.ts       # VK wall auto-posting
+│   ├── telegram-posting.service.ts # Telegram channel posting
 │   └── dto/create-integration.dto.ts
 ├── content/
 │   ├── content.module.ts

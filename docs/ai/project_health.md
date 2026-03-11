@@ -1,6 +1,6 @@
 # Project Health — Darba
 
-**Last updated:** 2026-03-10
+**Last updated:** 2026-03-12
 
 ## Build Status
 
@@ -77,3 +77,11 @@
 5. No monitoring/alerting setup (Prometheus/Grafana)
 6. No load testing done
 7. Docker build cache issues on server (sometimes needs --no-cache)
+
+## Backup Strategy
+
+- **Script:** `infra/postgres/backup.sh` — pg_dump to `/backups/darba/`
+- **Installer:** `infra/postgres/install-cron.sh` — sets up cron on server
+- **Schedule:** Daily at 3:00 AM (crontab)
+- **Retention:** 7 days (older backups auto-deleted)
+- **Format:** compressed pg_dump (`.sql.gz`)

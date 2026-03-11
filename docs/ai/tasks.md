@@ -71,8 +71,8 @@
 ### DevOps / CI
 - [ ] Automated deploy on PR merge to main (currently manual ssh + pull)
 - [ ] Docker build cache optimization (multi-stage, layer caching)
-- [ ] Health check endpoints in docker-compose (depends_on healthcheck)
-- [ ] Backup strategy for PostgreSQL (pg_dump cron or managed backup)
+- [x] Health check endpoints in docker-compose (postgres, redis, api healthcheck)
+- [x] Backup strategy for PostgreSQL (pg_dump cron daily 3AM, 7 day rotation)
 
 ## Low Priority / Future
 
