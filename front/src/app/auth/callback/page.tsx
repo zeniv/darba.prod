@@ -19,11 +19,12 @@ function AuthCallbackContent() {
 
   useEffect(() => {
     const code = params.get("code");
-    if (!code) {
-      setError("No authorization code");
-      return;
-    }
-    handleCallback(code).then((ok) => {
+    Promise.resolve().then(async () => {
+      if (!code) {
+        setError("No authorization code");
+        return;
+      }
+      const ok = await handleCallback(code);
       if (ok) {
         router.replace("/");
       } else {

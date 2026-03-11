@@ -5,7 +5,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { User, Heart, MessageCircle, Gift } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch, fetchFollowCounts } from "@/lib/api";
+import { apiFetch, fetchFollowCounts, Post } from "@/lib/api";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -39,7 +39,7 @@ export default function UserProfilePage({ params }: Props) {
   const { data: posts } = useQuery({
     queryKey: ["user-posts", profile?.id],
     queryFn: () =>
-      apiFetch<any[]>(`/posts/feed?userId=${profile!.id}`),
+      apiFetch<Post[]>(`/posts/feed?userId=${profile!.id}`),
     enabled: !!profile?.id,
   });
 
@@ -105,7 +105,7 @@ export default function UserProfilePage({ params }: Props) {
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {userPosts.map((post: any) => (
+              {userPosts.map((post: Post) => (
                 <div
                   key={post.id}
                   className="aspect-square bg-muted rounded-xl overflow-hidden relative group cursor-pointer"

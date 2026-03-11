@@ -3,7 +3,7 @@ Chat AI task — работает с Claude и GPT
 """
 from app.celery_app import celery_app
 from app.config import settings
-from app.agents.base import AgentResult, decrypt_api_key
+from app.agents.base import AgentResult
 from app.callback import notify_complete, notify_fail
 
 

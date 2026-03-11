@@ -17,13 +17,22 @@ const STATUS_LABELS: Record<string, string> = {
   closed: "Закрыт",
 };
 
+interface Ticket {
+  id: string;
+  subject: string;
+  status: string;
+  priority: string;
+  updatedAt: string;
+  user?: { email: string };
+}
+
 export default function AdminSupportPage() {
   const [statusFilter, setStatusFilter] = useState("");
 
   const { data } = useQuery({
     queryKey: ["admin-tickets", statusFilter],
     queryFn: () =>
-      apiFetch<{ tickets: any[]; total: number }>(
+      apiFetch<{ tickets: Ticket[]; total: number }>(
         `/admin/support/tickets?status=${statusFilter}`,
       ),
     staleTime: 10_000,
@@ -51,7 +60,7 @@ export default function AdminSupportPage() {
 
       {/* Tickets */}
       <div className="space-y-2">
-        {tickets.map((t: any) => (
+        {tickets.map((t: Ticket) => (
           <div
             key={t.id}
             className="border border-border rounded-lg p-4 flex items-center gap-3 hover:bg-accent/50 cursor-pointer"

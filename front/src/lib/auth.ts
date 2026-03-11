@@ -129,6 +129,7 @@ export function isLoggedIn(): boolean {
 }
 
 /** Parse JWT payload without verification (for display only) */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseTokenPayload(token: string): Record<string, any> | null {
   try {
     const parts = token.split(".");

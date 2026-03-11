@@ -5,10 +5,17 @@ import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
+interface CmsPage {
+  id: string;
+  slug: string;
+  title?: { ru?: string; en?: string };
+  isPublic: boolean;
+}
+
 export default function AdminPagesPage() {
   const { data: pages } = useQuery({
     queryKey: ["admin-pages"],
-    queryFn: () => apiFetch<any[]>("/admin/pages"),
+    queryFn: () => apiFetch<CmsPage[]>("/admin/pages"),
   });
 
   return (
@@ -32,7 +39,7 @@ export default function AdminPagesPage() {
             </tr>
           </thead>
           <tbody className="divide-y divide-border">
-            {(pages || []).map((p: any) => (
+            {(pages || []).map((p: CmsPage) => (
               <tr key={p.id} className="hover:bg-accent/50">
                 <td className="px-4 py-3 font-mono text-xs">{p.slug}</td>
                 <td className="px-4 py-3">{p.title?.ru || p.title?.en || "—"}</td>

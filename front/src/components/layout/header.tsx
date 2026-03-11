@@ -9,7 +9,7 @@ import { useAuth } from "@/components/auth-provider";
 
 export function Header({ onToggleSidebar }: { onToggleSidebar?: () => void }) {
   const { theme, setTheme } = useTheme();
-  const { user, login, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [notificationCount] = useState(0);
 
   return (

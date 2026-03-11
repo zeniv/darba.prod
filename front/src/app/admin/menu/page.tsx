@@ -5,10 +5,18 @@ import { apiFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Plus, GripVertical } from "lucide-react";
 
+interface MenuItem {
+  id: string;
+  icon?: string;
+  label?: { ru?: string; en?: string };
+  url?: string;
+  children?: MenuItem[];
+}
+
 export default function AdminMenuPage() {
   const { data: items } = useQuery({
     queryKey: ["admin-menu"],
-    queryFn: () => apiFetch<any[]>("/admin/menu"),
+    queryFn: () => apiFetch<MenuItem[]>("/admin/menu"),
   });
 
   return (
@@ -22,7 +30,7 @@ export default function AdminMenuPage() {
       </div>
 
       <div className="space-y-2">
-        {(items || []).map((item: any) => (
+        {(items || []).map((item: MenuItem) => (
           <div key={item.id}>
             <div className="border border-border rounded-lg p-3 flex items-center gap-3 hover:bg-accent/50">
               <GripVertical className="h-4 w-4 text-muted-foreground cursor-grab" />
@@ -38,7 +46,7 @@ export default function AdminMenuPage() {
               </Button>
             </div>
             {/* Children */}
-            {item.children?.map((child: any) => (
+            {item.children?.map((child: MenuItem) => (
               <div
                 key={child.id}
                 className="ml-8 mt-1 border border-border rounded-lg p-3 flex items-center gap-3 hover:bg-accent/50"

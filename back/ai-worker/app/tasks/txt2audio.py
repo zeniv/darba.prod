@@ -41,7 +41,7 @@ def _elevenlabs(text: str, voice_id: str, api_key: str | None) -> str:
     from elevenlabs.client import ElevenLabs
 
     client = ElevenLabs(api_key=api_key or settings.elevenlabs_api_key)
-    audio = client.text_to_speech.convert(
+    _audio = client.text_to_speech.convert(  # noqa: F841
         voice_id=voice_id,
         text=text,
         model_id="eleven_multilingual_v2",

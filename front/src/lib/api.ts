@@ -1,6 +1,6 @@
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
-export async function apiFetch<T = any>(
+export async function apiFetch<T = unknown>(
   path: string,
   options?: RequestInit,
 ): Promise<T> {
@@ -93,7 +93,7 @@ export interface AiTask {
 export function runAiTask(
   token: string,
   agentType: string,
-  params: Record<string, any>,
+  params: Record<string, unknown>,
   provider?: string,
   model?: string,
 ): Promise<{ taskId: string; status: string; tokensUsed: number }> {
@@ -160,7 +160,7 @@ export interface Notification {
   type: string;
   title: string;
   body?: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
   isRead: boolean;
   createdAt: string;
 }
@@ -220,7 +220,7 @@ export function toggleLike(
   });
 }
 
-export function fetchComments(postId: string): Promise<any[]> {
+export function fetchComments(postId: string): Promise<unknown[]> {
   return apiFetch(`/social/posts/${postId}/comments`);
 }
 
