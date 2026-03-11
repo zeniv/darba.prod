@@ -63,16 +63,15 @@ export class PaymentsController {
   @Public()
   @SkipThrottle()
   @ApiOperation({ summary: 'Webhook ЮКасса' })
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async webhookYookassa(@Body() body: any, @Headers() headers: Record<string, string>) {
-    return this.paymentsService.handleWebhook('yookassa', body, headers);
+  async webhookYookassa(@Body() body: any, @Headers() _headers: Record<string, string>) {
+    return this.paymentsService.handleWebhook('yookassa', body, _headers);
   }
 
   @Post('webhook/stripe')
   @Public()
   @SkipThrottle()
   @ApiOperation({ summary: 'Webhook Stripe' })
-  async webhookStripe(@Body() body: any, @Headers() headers: Record<string, string>) {
-    return this.paymentsService.handleWebhook('stripe', body, headers);
+  async webhookStripe(@Body() body: any, @Headers() _headers: Record<string, string>) {
+    return this.paymentsService.handleWebhook('stripe', body, _headers);
   }
 }
