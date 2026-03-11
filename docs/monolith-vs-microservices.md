@@ -83,10 +83,10 @@
 
 ## Kubernetes — нужен ли?
 
-**Нет на старте.** Google Cloud Run обеспечивает:
-- Автомасштабирование (0 → N инстансов)
-- Rolling deploys
-- Health checks
+**Нет на старте.** Yandex Cloud VPS + Docker Compose обеспечивает:
+- Простой деплой через SSH + git pull + docker compose up
+- Health checks (postgres, redis, api healthcheck в compose)
+- Бэкапы PostgreSQL (pg_dump cron, 7 дней ротация)
 - Нет оверхеда управления кластером
 
 **Добавить K8s при:**

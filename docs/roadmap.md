@@ -48,7 +48,7 @@
 - [x] Баланс токенов на аккаунте
 - [x] Страница /profile/payment (история, чеки)
 - [x] Тикеты в поддержку (user side)
-- [ ] /admin/settings/payments
+- [x] /admin/settings/payments
 
 ---
 
@@ -63,8 +63,8 @@
 - [x] Агент: txt→img (Stable Diffusion / DALL-E)
 - [x] Агент: txt→audio (ElevenLabs)
 - [x] Хранение результатов в БД + S3/GCS
-- [x] Пользовательские API-ключи (шифрование, подключение)
-- [ ] /admin/settings/ai (API-ключи системы)
+- [x] Пользовательские API-ключи (шифрование AES-256-CBC)
+- [x] /admin/settings/ai (API-ключи системы)
 
 ---
 
@@ -99,7 +99,7 @@
 - [x] /admin/settings/marketing — пиксели, UTM
 - [x] /admin/security — pen-тест запуск, результаты
 - [x] Ролевая модель (admin, manager, support)
-- [ ] Первый запуск — wizard создания admin-аккаунта
+- [x] Первый запуск — SetupModule (wizard создания admin-аккаунта)
 
 ---
 
@@ -114,6 +114,28 @@
 - [x] MCP-серверы (конфигурация в admin)
 - [ ] Публикация контента в соцсети (автопостинг)
 - [ ] Мобильное приложение (отдельный проект, React Native)
+
+---
+
+## Post-Phase Hardening (DONE)
+
+- [x] Exception filters (AllExceptionsFilter, structured JSON errors)
+- [x] File upload validation (Multer configs, 10MB/5MB limits)
+- [x] Request logging (RequestLoggerMiddleware, env-based log levels)
+- [x] Unit tests (28 tests across 5 suites, all passing)
+- [x] VK auto-posting (VkPostingService, shareToVk flag)
+- [x] Telegram channel posting (TelegramPostingService)
+- [x] Social login (Google, VK, Facebook, Apple, Instagram via Keycloak IdPs)
+- [x] Dynamic login providers (GET /api/auth/providers)
+- [x] Detailed health endpoint (/api/health/detailed)
+- [x] Rate limiting (@nestjs/throttler)
+- [x] Input sanitization (SanitizePipe)
+- [x] Email notifications (EmailService + nodemailer)
+- [x] Token encryption (AES-256-CBC for API keys)
+- [x] Webhook signature verification (Stripe, YooKassa)
+- [x] SSL/HTTPS (Let's Encrypt, auto-renew, HSTS)
+- [x] PostgreSQL backups (pg_dump cron, 7 day rotation)
+- [x] CORS configuration (CORS_ORIGINS env var)
 
 ---
 

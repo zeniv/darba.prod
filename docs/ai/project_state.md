@@ -1,6 +1,6 @@
 # Project State — Darba
 
-**Last updated:** 2026-03-10
+**Last updated:** 2026-03-12
 
 ## Git / CI/CD
 
@@ -10,7 +10,7 @@
 - **CI:** GitHub Actions — lint, typecheck, build on push to dev/main and PRs
 - **Deploy:** GitHub Actions — SSH deploy to Yandex Cloud on push to dev (auto), on merged PR to main (after approval)
 - **gh CLI:** installed, authenticated as zeniv
-- **Latest PR:** #16 (fix: API Dockerfile dist path)
+- **Latest PR:** #17 (security hardening, token encryption, tests, DevOps)
 
 ## Production Server (Yandex Cloud)
 
@@ -21,7 +21,7 @@
 - **Docker:** 29.3.0 + Compose 5.1.0
 - **Deploy key:** id_deploy (SSH from GitHub to server)
 - All 8 services running via docker compose
-- **Last deploy:** 2026-03-10 (PR #13-#16)
+- **Last deploy:** 2026-03-12 (PR #17)
 
 ## Phase Completion
 
@@ -49,6 +49,8 @@
 - Rate limiting (@nestjs/throttler)
 - Input sanitization (SanitizePipe)
 - Email notifications (EmailService + nodemailer)
+- PostgreSQL backups (pg_dump cron daily 3AM, 7 day rotation)
+- gitignore local dev overrides (docker-compose.override.yml)
 
 ## First Launch — DONE (2026-03-08)
 

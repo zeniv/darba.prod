@@ -106,29 +106,26 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 # push → main  → деплой в prod (после approval)
 ```
 
-### Шаги pipeline:
+### Шаги CI (ci.yml):
 1. `checkout` — получить код
 2. `lint + typecheck` — ESLint, tsc --noEmit
-3. `test` — unit + integration тесты
-4. `docker build` — собрать образы
-5. `push` → Google Artifact Registry
-6. `migrate` — Prisma db push / alembic upgrade
-7. `deploy` → Cloud Run (или docker-compose на VPS)
-8. (только test) `pen-test` → OWASP ZAP scan
-9. (только test) `load-test` → k6 сценарии
+3. `build` — NestJS + Next.js build
+
+### Шаги Deploy (deploy.yml):
+1. SSH на Yandex Cloud VPS (89.169.178.103)
+2. `git pull origin main`
+3. `docker compose up -d --build --remove-orphans`
+4. `docker image prune -f`
 
 ---
 
 ## Защита секретов при деплое
 
-### Dev/Test серверы
-- GitHub Secrets → GitHub Actions → SSH → создаёт/обновляет `.env` на сервере
-- Существующие переменные НЕ перезаписываются если уже существуют (кроме явного флага)
-
-### Prod (Google Cloud)
-- Секреты в Google Secret Manager
-- Cloud Run читает их через IAM (нет env файлов на диске)
-- Ротация секретов без redeploy
+### Все окружения (Yandex Cloud VPS)
+- `.env` файл на сервере, доставляется через SSH (не в git)
+- GitHub Secrets хранят SSH-ключ для деплоя
+- Deploy key (`id_deploy`) для git pull на сервере
+- Бэкапы PostgreSQL: ежедневный pg_dump cron (3:00 AM), хранение 7 дней
 
 ---
 

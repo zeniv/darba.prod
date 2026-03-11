@@ -5,10 +5,14 @@
 ### 1. Авторизация — Keycloak
 
 - **Конфиг:** `/admin/settings/auth`
-- **Протокол:** OpenID Connect, OAuth2, PKCE
-- **Социальный вход:** Google, Apple (настраивается в Keycloak Identity Providers)
+- **Протокол:** OpenID Connect, OAuth2, PKCE S256
+- **Социальный вход:** Google, VK, Facebook, Apple, Instagram (Keycloak Identity Providers)
+- **VK:** через keycloak-russian-providers SPI (v1.0.42 JAR в кастомном Dockerfile)
+- **Dynamic providers:** GET /api/auth/providers — возвращает список включенных IdPs (5 min кэш)
+- **Login page:** динамически рендерит кнопки на основе /api/auth/providers
+- **kc_idp_hint:** параметр для прямого перехода на IdP
 - **Управление пользователями:** Admin REST API → NestJS читает/создаёт/блокирует юзеров
-- **JWT валидация:** NestJS Guard проверяет токен через Keycloak JWKS endpoint
+- **JWT валидация:** JWKS RS256 (1h кэш) + JWT_SECRET fallback
 
 ### 2. Платежи — ЮКасса (Россия)
 
@@ -52,7 +56,7 @@
 
 Пользователь подключает свои API-ключи:
 - OpenAI, Anthropic, или любой OpenAI-совместимый API
-- Ключ шифруется Fernet (Python) перед сохранением в БД
+- Ключ шифруется AES-256-CBC (NestJS) перед сохранением в БД
 - При выполнении задачи воркер расшифровывает ключ в памяти
 
 **Endpoint:** `POST /api/user/integrations/ai`
@@ -121,7 +125,7 @@ stream:analytics → события {user_id, event, props, timestamp}
 
 ## Безопасность интеграций
 
-1. **Все API-ключи** хранятся зашифрованными (Fernet, ключ в env)
+1. **Все API-ключи** хранятся зашифрованными (AES-256-CBC, ключ в env)
 2. **Webhook endpoints** верифицируют подписи (HMAC)
 3. **OAuth токены** — только refresh-токены в БД, access-токены только в памяти
 4. **Rate limiting** на все интеграционные endpoints
