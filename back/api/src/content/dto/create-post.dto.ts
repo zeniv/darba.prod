@@ -1,5 +1,5 @@
 import { IsString, IsOptional, IsBoolean, IsArray, IsEnum } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePostDto {
   @ApiPropertyOptional({ description: 'Заголовок' })

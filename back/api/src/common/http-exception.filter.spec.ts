@@ -1,7 +1,5 @@
 import { AllExceptionsFilter } from './http-exception.filter';
 import {
-  HttpException,
-  HttpStatus,
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';

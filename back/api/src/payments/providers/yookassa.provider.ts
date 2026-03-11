@@ -61,7 +61,7 @@ export class YooKassaProvider implements PaymentProvider {
     };
   }
 
-  async parseWebhook(body: any, headers: Record<string, string>): Promise<WebhookEvent> {
+  async parseWebhook(body: any, _headers: Record<string, string>): Promise<WebhookEvent> {
     // Verify: fetch payment from YooKassa API to confirm status
     await this.verifyPayment(body.object?.id);
     const payment = body.object;

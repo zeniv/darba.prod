@@ -15,7 +15,7 @@ export class TokenService {
   }
 
   /** Deduct tokens for AI task usage */
-  async deduct(userId: string, amount: number, reason: string): Promise<number> {
+  async deduct(userId: string, amount: number, _reason: string): Promise<number> {
     if (amount <= 0) throw new BadRequestException('Amount must be positive');
 
     const user = await this.prisma.user.findUnique({

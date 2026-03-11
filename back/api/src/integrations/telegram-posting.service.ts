@@ -72,7 +72,7 @@ export class TelegramPostingService {
       }
 
       return { ok: true, messageId: data.result.message_id };
-    } catch (err) {
+    } catch {
       return { ok: false, error: 'Connection test failed' };
     }
   }

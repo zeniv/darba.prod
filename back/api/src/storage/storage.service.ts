@@ -19,7 +19,7 @@ export class StorageService {
   }
 
   /** Generate a signed upload URL (pre-signed PUT) */
-  async getUploadUrl(key: string, contentType: string): Promise<string> {
+  async getUploadUrl(key: string, _contentType: string): Promise<string> {
     // TODO: Implement S3-compatible pre-signed URL generation
     // For now, return a placeholder path
     return `${this.endpoint}/${this.bucket}/${key}`;

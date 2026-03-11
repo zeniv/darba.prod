@@ -1,5 +1,5 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsEnum } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateIntegrationDto {
   @ApiProperty({
