@@ -4,7 +4,10 @@ services:
   nginx:
     ports:
       - "80:80"
-    # В dev не нужен HTTPS
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infra/nginx/darba-local.conf:/etc/nginx/conf.d/darba.conf:ro
+    # В dev не нужен HTTPS, подменяем conf.d целиком на local-конфиг
 
   frontend:
     build:
