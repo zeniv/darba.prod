@@ -10,7 +10,8 @@ darba/
 │   └── ai-worker/                  # Python Celery worker
 ├── infra/
 │   ├── nginx/nginx.conf            # Main nginx config
-│   ├── nginx/conf.d/darba.conf     # Upstream routing rules
+│   ├── nginx/conf.d/darba.conf     # Prod upstream routing (HTTPS, SSL, proxy)
+│   ├── nginx/darba-local.conf     # Local dev routing (HTTP only, no SSL)
 │   ├── postgres/init.sql           # DB init (pgvector, uuid-ossp)
 │   ├── postgres/backup.sh          # pg_dump daily backup script
 │   ├── postgres/install-cron.sh    # Cron installer for backup on server

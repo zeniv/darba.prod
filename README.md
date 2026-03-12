@@ -41,11 +41,16 @@ go.bat
 ./go.sh
 ```
 
-Services start at:
-- Frontend: http://127.0.0.1:80
-- API + Swagger: http://127.0.0.1:80/api/docs
-- Keycloak: http://127.0.0.1:8080
-- pgAdmin: http://127.0.0.1:5050
+### Local URLs
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://127.0.0.1 |
+| API Swagger | http://127.0.0.1/api/docs |
+| API Health | http://127.0.0.1/api/health |
+| Keycloak Admin | http://127.0.0.1:8080 |
+| pgAdmin | http://127.0.0.1:5050 |
+| API direct | http://127.0.0.1:8000 |
 
 ## Production
 
@@ -53,6 +58,17 @@ Services start at:
 - **Domain:** darba.pro (SSL: Let's Encrypt, auto-renew)
 - **Deploy:** push to `dev` → CI; merge PR to `main` → SSH deploy
 - **Backups:** PostgreSQL pg_dump daily at 3AM, 7 day retention
+- **SMTP:** mail.nic.ru:587 (support@darba.pro)
+
+### Production URLs
+
+| Service | URL |
+|---------|-----|
+| Frontend | https://darba.pro |
+| API Swagger | https://darba.pro/api/docs |
+| API Health | https://darba.pro/api/health |
+| Keycloak Admin | https://darba.pro/keycloak/ |
+| pgAdmin | https://darba.pro/pgadmin/ |
 
 ## Project structure
 
@@ -77,7 +93,7 @@ darba/
 ## Status
 
 All 6 phases + post-phase hardening complete. 8 Docker services running.
-28 unit tests passing. 17 PRs merged.
+28 unit tests passing. 23 PRs merged. CI fully green.
 
 ## License
 
