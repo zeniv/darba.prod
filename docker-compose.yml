@@ -123,6 +123,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL:-admin@darba.pro}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD:-darba}
       - PGADMIN_LISTEN_PORT=5050
+      - SCRIPT_NAME=/pgadmin
     ports:
       - "5050:5050"
     depends_on:
