@@ -10,7 +10,8 @@
 - **CI:** GitHub Actions — lint, typecheck, build on push to dev/main and PRs
 - **Deploy:** GitHub Actions — SSH deploy to Yandex Cloud on push to dev (auto), on merged PR to main (after approval)
 - **gh CLI:** installed, authenticated as zeniv
-- **Latest PR:** #17 (security hardening, token encryption, tests, DevOps)
+- **Latest PR:** #23 (nginx HTTPS proxy for Keycloak/pgAdmin, SMTP, CI fixes)
+- **CI node version:** 22 (LTS), prisma generate step before lint/typecheck
 
 ## Production Server (Yandex Cloud)
 
@@ -21,7 +22,8 @@
 - **Docker:** 29.3.0 + Compose 5.1.0
 - **Deploy key:** id_deploy (SSH from GitHub to server)
 - All 8 services running via docker compose
-- **Last deploy:** 2026-03-12 (PR #17)
+- **SMTP:** mail.nic.ru:587 (support@darba.pro), connected
+- **Last deploy:** 2026-03-12 (PR #23)
 
 ## Phase Completion
 

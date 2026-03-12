@@ -50,14 +50,14 @@
 - [ ] Enable desired Identity Providers (login page adapts automatically)
 - [ ] Create darba-frontend client in Keycloak realm
 
-### SMTP / Email
-- [ ] Configure real SMTP server (Yandex.Mail, SendGrid, or Mailgun)
-- [ ] Wire SMTP credentials to EmailService env vars
+### SMTP / Email — DONE
+- [x] Configure real SMTP server — mail.nic.ru:587 (NIC.RU hosting)
+- [x] Wire SMTP credentials to EmailService env vars (back/.env on local + prod)
 - [ ] Test email notifications end-to-end
 
 ### Security Hardening
-- [ ] Restrict Keycloak admin port (8080) — nginx auth or firewall
-- [ ] Restrict pgAdmin port (5050) — nginx auth or firewall
+- [x] Proxy Keycloak via nginx HTTPS — https://darba.pro/keycloak/
+- [x] Proxy pgAdmin via nginx HTTPS — https://darba.pro/pgadmin/
 - [ ] Encrypt social OAuth tokens in UserIntegration table
 - [ ] OWASP ZAP security scan
 - [ ] CSP (Content-Security-Policy) headers in nginx

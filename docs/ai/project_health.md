@@ -22,8 +22,8 @@
 | API Swagger | https://darba.pro/api/docs | 200 |
 | Auth Providers | https://darba.pro/api/auth/providers | 200 (dynamic) |
 | Login Page | https://darba.pro/login | 200 |
-| Keycloak | http://89.169.178.103:8080 | 200 |
-| pgAdmin | http://89.169.178.103:5050 | 200 |
+| Keycloak Admin | https://darba.pro/keycloak/ | 200 |
+| pgAdmin | https://darba.pro/pgadmin/ | 302 (login) |
 | HTTP redirect | http://darba.pro | 301 -> https |
 
 ## Test Coverage
@@ -50,7 +50,7 @@
 - [x] HTTPS/SSL — Let's Encrypt, auto-renew, HSTS header
 - [x] Body size limits — Express body parser 1MB, Multer 10MB files
 - [ ] OWASP top 10 full audit
-- [ ] Keycloak/pgAdmin port restriction (currently public)
+- [x] Keycloak/pgAdmin proxied through nginx HTTPS (/keycloak/, /pgadmin/)
 
 ## Performance
 
@@ -65,15 +65,15 @@
 
 1. Turbopack panics on Docker anonymous volumes — using webpack for local dev
 2. Windows Docker volume I/O is 5-10x slower than native Linux
-3. Keycloak and pgAdmin exposed on public ports without auth proxy
+3. ~~Keycloak and pgAdmin exposed on public ports~~ — now proxied via nginx HTTPS
 4. nest build outputs to dist/src/ (no rootDir in tsconfig) — Dockerfile CMD adjusted
 
 ## Technical Debt
 
 1. No E2E / integration tests
-2. Email service in dry-run mode (no SMTP configured)
+2. ~~Email service in dry-run mode~~ — SMTP configured (mail.nic.ru:587)
 3. Social OAuth tokens stored unencrypted in UserIntegration (TODO in code)
-4. Keycloak/pgAdmin exposed on public ports
+4. ~~Keycloak/pgAdmin exposed on public ports~~ — proxied via nginx HTTPS
 5. No monitoring/alerting setup (Prometheus/Grafana)
 6. No load testing done
 7. Docker build cache issues on server (sometimes needs --no-cache)
