@@ -1,0 +1,16 @@
+{
+  "name": "Darba — AI Studio",
+  "short_name": "Darba",
+  "description": "Все AI-инструменты в одном месте",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#6366f1",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

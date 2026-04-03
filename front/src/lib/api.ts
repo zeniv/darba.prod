@@ -264,3 +264,58 @@ export function getVkAuthUrl(
     headers: { Authorization: `Bearer ${token}` },
   });
 }
+
+// ── Support ──
+
+export interface SupportTicket {
+  id: string;
+  subject: string;
+  status: string;
+  priority: string;
+  createdAt: string;
+  updatedAt: string;
+  messages: SupportMessage[];
+}
+
+export interface SupportMessage {
+  id: string;
+  content: string;
+  authorId: string;
+  createdAt: string;
+}
+
+export function fetchTickets(token: string): Promise<SupportTicket[]> {
+  return apiFetch<SupportTicket[]>("/support/tickets", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export function fetchTicket(token: string, id: string): Promise<SupportTicket> {
+  return apiFetch<SupportTicket>(`/support/tickets/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+}
+
+export function createTicket(
+  token: string,
+  subject: string,
+  message: string,
+): Promise<SupportTicket> {
+  return apiFetch<SupportTicket>("/support/tickets", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ subject, message }),
+  });
+}
+
+export function addTicketMessage(
+  token: string,
+  ticketId: string,
+  content: string,
+): Promise<SupportMessage> {
+  return apiFetch<SupportMessage>(`/support/tickets/${ticketId}/messages`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ content }),
+  });
+}
