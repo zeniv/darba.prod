@@ -1,9 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Send, Bot, User, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/components/auth-provider";
+import { runAiTask, fetchTaskStatus } from "@/lib/api";
+
+const POLL_INTERVAL_MS = 2000;
+const MAX_POLLS = 30;
 
 interface Message {
   role: "user" | "assistant";
@@ -11,10 +16,23 @@ interface Message {
 }
 
 export default function HomePage() {
+  const { token } = useAuth();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const clearPoll = useCallback(() => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current);
+      pollRef.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    return clearPoll;
+  }, [clearPoll]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -24,27 +42,88 @@ export default function HomePage() {
     const text = input.trim();
     if (!text || loading) return;
 
+    if (!token) {
+      setMessages((prev) => [
+        ...prev,
+        { role: "user", content: text },
+        {
+          role: "assistant",
+          content:
+            "Для использования AI-чата необходимо войти в аккаунт.",
+        },
+      ]);
+      setInput("");
+      return;
+    }
+
     const userMessage: Message = { role: "user", content: text };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
 
     try {
-      // TODO: replace with real API call POST /api/ai/run
-      // For now, simulate response
-      await new Promise((r) => setTimeout(r, 1500));
-      const assistantMessage: Message = {
-        role: "assistant",
-        content:
-          "Для работы AI-чата необходимо запустить бэкенд и настроить API-ключи в разделе Профиль → Интеграции.",
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-    } catch {
+      const allMessages = [...messages, userMessage].map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
+
+      const { taskId } = await runAiTask(token, "chat", {
+        messages: allMessages,
+      });
+
+      let polls = 0;
+
+      await new Promise<void>((resolve, reject) => {
+        pollRef.current = setInterval(async () => {
+          polls += 1;
+
+          if (polls > MAX_POLLS) {
+            clearPoll();
+            reject(new Error("timeout"));
+            return;
+          }
+
+          try {
+            const task = await fetchTaskStatus(token, taskId);
+
+            if (task.status === "done") {
+              clearPoll();
+              setMessages((prev) => [
+                ...prev,
+                {
+                  role: "assistant",
+                  content: task.result ?? "",
+                },
+              ]);
+              resolve();
+            } else if (task.status === "error") {
+              clearPoll();
+              setMessages((prev) => [
+                ...prev,
+                {
+                  role: "assistant",
+                  content: task.error ?? "Произошла ошибка при обработке запроса.",
+                },
+              ]);
+              resolve();
+            }
+          } catch (err) {
+            clearPoll();
+            reject(err);
+          }
+        }, POLL_INTERVAL_MS);
+      });
+    } catch (err) {
+      const msg =
+        err instanceof Error && err.message === "timeout"
+          ? "Превышено время ожидания ответа. Попробуйте позже."
+          : "Произошла ошибка. Попробуйте позже.";
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Произошла ошибка. Попробуйте позже." },
+        { role: "assistant", content: msg },
       ]);
     } finally {
+      clearPoll();
       setLoading(false);
     }
   };

@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/components/auth-provider";
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -30,18 +31,17 @@ function formatAmount(amount: string, currency: string) {
 }
 
 export default function PaymentHistoryPage() {
-  // TODO: replace with real auth token from session
-  const token = "";
+  const { token } = useAuth();
 
   const { data: balanceData } = useQuery({
     queryKey: ["token-balance"],
-    queryFn: () => fetchTokenBalance(token),
+    queryFn: () => fetchTokenBalance(token!),
     enabled: !!token,
   });
 
   const { data: payments } = useQuery({
     queryKey: ["payment-history"],
-    queryFn: () => fetchPaymentHistory(token),
+    queryFn: () => fetchPaymentHistory(token!),
     enabled: !!token,
   });
 
