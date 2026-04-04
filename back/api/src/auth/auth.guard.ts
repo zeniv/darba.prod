@@ -43,7 +43,8 @@ export class AuthGuard implements CanActivate {
       // Accept both internal Docker URL and external public URL as valid issuers
       // (KC_HOSTNAME makes Keycloak sign tokens with external issuer)
       const keycloakPublicUrl = this.configService.get<string>('KEYCLOAK_PUBLIC_URL', '');
-      const issuers = [`${keycloakUrl}/realms/${realm}`];
+      const internalIssuer = `${keycloakUrl}/realms/${realm}`;
+      const issuers: [string, ...string[]] = [internalIssuer];
       if (keycloakPublicUrl) {
         issuers.push(`${keycloakPublicUrl}/realms/${realm}`);
       }
