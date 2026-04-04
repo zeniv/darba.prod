@@ -33,7 +33,7 @@ export async function login(provider?: string) {
     client_id: KEYCLOAK_CLIENT_ID,
     response_type: "code",
     scope: "openid email profile",
-    redirect_uri: `${window.location.origin}/auth/callback`,
+    redirect_uri: `${window.location.origin}/login/callback`,
     code_challenge: challenge,
     code_challenge_method: "S256",
   });
@@ -55,7 +55,7 @@ export async function handleCallback(code: string): Promise<boolean> {
     grant_type: "authorization_code",
     client_id: KEYCLOAK_CLIENT_ID,
     code,
-    redirect_uri: `${window.location.origin}/auth/callback`,
+    redirect_uri: `${window.location.origin}/login/callback`,
     code_verifier: verifier,
   });
 
