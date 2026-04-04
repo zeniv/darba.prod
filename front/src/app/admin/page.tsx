@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 import { Users, CreditCard, FileText, TrendingUp } from "lucide-react";
 
 interface Stats {
@@ -49,7 +49,7 @@ function StatCardSkeleton() {
 export default function AdminDashboard() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ["admin-stats"],
-    queryFn: () => apiFetch<Stats>("/admin/stats"),
+    queryFn: () => authFetch<Stats>("/admin/stats"),
     staleTime: 30_000,
   });
 

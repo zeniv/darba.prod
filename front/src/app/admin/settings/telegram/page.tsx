@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 
 export default function AdminTelegramPage() {
   const [webhookUrl, setWebhookUrl] = useState("");
@@ -10,7 +10,7 @@ export default function AdminTelegramPage() {
 
   async function handleSetWebhook() {
     try {
-      await apiFetch("/admin/settings/telegram/webhook", {
+      await authFetch("/admin/settings/telegram/webhook", {
         method: "POST",
         body: JSON.stringify({ url: webhookUrl }),
       });

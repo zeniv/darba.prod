@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
@@ -15,7 +15,7 @@ interface CmsPage {
 export default function AdminPagesPage() {
   const { data: pages } = useQuery({
     queryKey: ["admin-pages"],
-    queryFn: () => apiFetch<CmsPage[]>("/admin/pages"),
+    queryFn: () => authFetch<CmsPage[]>("/admin/pages"),
   });
 
   return (

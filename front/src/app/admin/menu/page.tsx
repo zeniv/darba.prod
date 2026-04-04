@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Plus, GripVertical } from "lucide-react";
 
@@ -16,7 +16,7 @@ interface MenuItem {
 export default function AdminMenuPage() {
   const { data: items } = useQuery({
     queryKey: ["admin-menu"],
-    queryFn: () => apiFetch<MenuItem[]>("/admin/menu"),
+    queryFn: () => authFetch<MenuItem[]>("/admin/menu"),
   });
 
   return (

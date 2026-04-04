@@ -21,6 +21,27 @@ export async function apiFetch<T = unknown>(
   return res.json();
 }
 
+/**
+ * Authenticated API fetch — auto-injects Bearer token from localStorage.
+ * Use for admin pages and any endpoint that requires auth.
+ */
+export function authFetch<T = unknown>(
+  path: string,
+  options?: RequestInit,
+): Promise<T> {
+  const token =
+    typeof window !== "undefined"
+      ? localStorage.getItem("darba_token")
+      : null;
+  return apiFetch<T>(path, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+}
+
 // ── Plans ──
 
 export interface Plan {
