@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -32,7 +32,7 @@ export default function AdminSupportPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-tickets", statusFilter],
     queryFn: () =>
-      apiFetch<{ tickets: Ticket[]; total: number }>(
+      authFetch<{ tickets: Ticket[]; total: number }>(
         `/admin/support/tickets?status=${statusFilter}`,
       ),
     staleTime: 10_000,

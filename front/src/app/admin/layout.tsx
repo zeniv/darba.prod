@@ -1,8 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/components/auth-provider";
 import {
   LayoutDashboard,
   Users,
@@ -16,7 +18,10 @@ import {
   BarChart3,
   MessageCircle,
   Megaphone,
+  Loader2,
 } from "lucide-react";
+
+const ADMIN_ROLES = ["admin", "realm-admin", "manager"];
 
 const adminNav = [
   { label: "Дашборд", href: "/admin", icon: LayoutDashboard },
@@ -39,6 +44,33 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  const hasAccess = user?.roles?.some((r) => ADMIN_ROLES.includes(r)) ?? false;
+
+  useEffect(() => {
+    if (loading) return;
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+    if (!hasAccess) {
+      router.replace("/");
+    }
+  }, [loading, user, hasAccess, router]);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!user || !hasAccess) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen">

@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation, ApiQuery } from '@nestjs/swagger';
 import { AdminGuard } from './admin.guard';
+import { AdminOnly } from './admin-only.decorator';
 import { AdminUsersService } from './admin-users.service';
 import { AdminSupportService } from './admin-support.service';
 import { AdminCmsService } from './admin-cms.service';
@@ -62,6 +63,7 @@ export class AdminController {
   }
 
   @Patch('users/:id')
+  @AdminOnly()
   @ApiOperation({ summary: 'Обновить пользователя (бан, роль, тариф)' })
   async updateUser(
     @Param('id') id: string,
@@ -102,6 +104,7 @@ export class AdminController {
   }
 
   @Post('support/tickets/:id/reply')
+  @AdminOnly()
   @ApiOperation({ summary: 'Ответить на тикет' })
   async replyTicket(
     @Param('id') id: string,
@@ -111,6 +114,7 @@ export class AdminController {
   }
 
   @Post('support/tickets/:id/close')
+  @AdminOnly()
   @ApiOperation({ summary: 'Закрыть тикет' })
   async closeTicket(@Param('id') id: string) {
     return this.adminSupport.closeTicket(id);
@@ -131,6 +135,7 @@ export class AdminController {
   }
 
   @Post('pages')
+  @AdminOnly()
   @ApiOperation({ summary: 'Создать/обновить CMS-страницу' })
   async upsertPage(
     @Body() body: {
@@ -145,6 +150,7 @@ export class AdminController {
   }
 
   @Delete('pages/:id')
+  @AdminOnly()
   @ApiOperation({ summary: 'Удалить CMS-страницу' })
   async deletePage(@Param('id') id: string) {
     return this.adminCms.deletePage(id);
@@ -159,6 +165,7 @@ export class AdminController {
   }
 
   @Post('menu')
+  @AdminOnly()
   @ApiOperation({ summary: 'Создать/обновить пункт меню' })
   async upsertMenu(
     @Body() body: {
@@ -176,6 +183,7 @@ export class AdminController {
   }
 
   @Delete('menu/:id')
+  @AdminOnly()
   @ApiOperation({ summary: 'Удалить пункт меню' })
   async deleteMenu(@Param('id') id: string) {
     return this.adminCms.deleteMenuItem(id);
@@ -184,6 +192,7 @@ export class AdminController {
   // ── Settings ──
 
   @Post('settings/telegram/webhook')
+  @AdminOnly()
   @ApiOperation({ summary: 'Установить Telegram webhook' })
   async setupTelegramWebhook(@Body() body: { url: string }) {
     return this.adminSettings.setupTelegramWebhook(body.url);

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { apiFetch } from "@/lib/api";
+import { authFetch } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -25,7 +25,7 @@ export default function AdminUsersPage() {
   const { data, isLoading } = useQuery({
     queryKey: ["admin-users", search, page],
     queryFn: () =>
-      apiFetch<{ users: UserRow[]; total: number; pages: number }>(
+      authFetch<{ users: UserRow[]; total: number; pages: number }>(
         `/admin/users?search=${encodeURIComponent(search)}&page=${page}`,
       ),
     staleTime: 10_000,
