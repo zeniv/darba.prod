@@ -40,7 +40,13 @@ export class AuthGuard implements CanActivate {
     try {
       const keycloakUrl = this.configService.get<string>('KEYCLOAK_URL', 'http://keycloak:8080');
       const realm = this.configService.get<string>('KEYCLOAK_REALM', 'darba');
-      const issuer = `${keycloakUrl}/realms/${realm}`;
+      // Accept both internal Docker URL and external public URL as valid issuers
+      // (KC_HOSTNAME makes Keycloak sign tokens with external issuer)
+      const keycloakPublicUrl = this.configService.get<string>('KEYCLOAK_PUBLIC_URL', '');
+      const issuers = [`${keycloakUrl}/realms/${realm}`];
+      if (keycloakPublicUrl) {
+        issuers.push(`${keycloakPublicUrl}/realms/${realm}`);
+      }
 
       // Try JWKS verification first, fallback to JWT_SECRET
       let payload: any;
@@ -48,13 +54,13 @@ export class AuthGuard implements CanActivate {
         const publicKey = await this.getKeycloakPublicKey(keycloakUrl, realm);
         payload = await this.jwtService.verifyAsync(token, {
           secret: publicKey,
-          issuer,
+          issuer: issuers,
           algorithms: ['RS256'],
         });
       } catch {
         payload = await this.jwtService.verifyAsync(token, {
           secret: this.configService.get<string>('JWT_SECRET'),
-          issuer,
+          issuer: issuers,
         });
       }
 
