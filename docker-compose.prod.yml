@@ -31,12 +31,12 @@ services:
     restart: always
 
   ai-worker:
-    command: celery -A app.celery_app worker --loglevel=warning --concurrency=4
+    command: celery -A app.celery_app worker --loglevel=warning --concurrency=2
     deploy:
       resources:
         limits:
-          cpus: '4'
-          memory: 4G
+          cpus: '1.5'
+          memory: 2G
     restart: always
 
   postgres:
@@ -57,7 +57,6 @@ services:
     restart: always
 
   keycloak:
-    command: start --optimized
     environment:
       - KC_PROXY=edge
       - KC_HOSTNAME=${APP_DOMAIN:-darba.pro}

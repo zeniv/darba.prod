@@ -7,5 +7,8 @@ ADD --chown=keycloak:keycloak https://repo1.maven.org/maven2/ru/playa/keycloak/k
 ADD --chown=keycloak:keycloak https://repo1.maven.org/maven2/com/jayway/jsonpath/json-path/2.7.0/json-path-2.7.0.jar /opt/keycloak/providers/json-path.jar
 ADD --chown=keycloak:keycloak https://repo1.maven.org/maven2/net/minidev/json-smart/2.4.7/json-smart-2.4.7.jar /opt/keycloak/providers/json-smart.jar
 
+# Pre-build with PostgreSQL driver for production mode (start --optimized)
+RUN /opt/keycloak/bin/kc.sh build --db=postgres
+
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
-CMD ["start-dev", "--import-realm"]
+CMD ["start", "--optimized", "--import-realm"]
