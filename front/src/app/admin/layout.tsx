@@ -52,7 +52,7 @@ export default function AdminLayout({
   useEffect(() => {
     if (loading) return;
     if (!user) {
-      router.replace("/login");
+      router.replace(`/login?returnTo=${encodeURIComponent(pathname)}`);
       return;
     }
     if (!hasAccess) {
