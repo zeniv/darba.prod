@@ -1,13 +1,20 @@
 @echo off
 echo [Darba] Starting development environment...
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+
+echo [Darba] Waiting for containers to start...
+timeout /t 5 /nobreak >nul
+
+echo [Darba] Reloading nginx (re-resolve upstream DNS)...
+docker exec darba-nginx-1 nginx -s reload 2>nul
+
 echo.
 echo [Darba] Services started:
-echo   Frontend:  http://localhost:3000
-echo   API:       http://localhost:8000
-echo   Keycloak:  http://localhost:8080
-echo   PgAdmin:   connect to localhost:5432
-echo   Redis:     localhost:6379
+echo   App:       http://127.0.0.1
+echo   API:       http://127.0.0.1/api/health
+echo   Swagger:   http://127.0.0.1/api/docs
+echo   Keycloak:  http://127.0.0.1:8080
+echo   pgAdmin:   http://127.0.0.1:5050
 echo.
 echo [Darba] Logs: docker-compose logs -f
 pause

@@ -21,7 +21,7 @@ const PROVIDERS = [
 export default function ProfileIntegrationsPage() {
   const queryClient = useQueryClient();
 
-  const { data: connections } = useQuery({
+  const { data: connections, isLoading } = useQuery({
     queryKey: ["social-connections"],
     queryFn: () => apiFetch<SocialConnection[]>("/oauth/connections"),
   });
@@ -47,6 +47,18 @@ export default function ProfileIntegrationsPage() {
 
       {/* Social OAuth providers */}
       <div className="space-y-4">
+        {isLoading && Array.from({ length: 2 }).map((_, i) => (
+          <div key={i} className="border border-border rounded-xl p-5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="h-6 w-6 bg-muted animate-pulse rounded" />
+              <div className="space-y-2">
+                <div className="h-4 w-32 bg-muted animate-pulse rounded" />
+                <div className="h-3 w-20 bg-muted animate-pulse rounded" />
+              </div>
+            </div>
+            <div className="h-8 w-24 bg-muted animate-pulse rounded-lg" />
+          </div>
+        ))}
         {PROVIDERS.map((p) => {
           const conn = getConnection(p.key);
           const Icon = p.icon;
