@@ -1,0 +1,221 @@
+/* Darba custom Keycloak theme — dark, minimal, matches darba.pro */
+
+:root {
+  --darba-bg: #09090b;
+  --darba-card: #18181b;
+  --darba-border: #27272a;
+  --darba-text: #fafafa;
+  --darba-muted: #a1a1aa;
+  --darba-primary: #6366f1;
+  --darba-primary-hover: #818cf8;
+  --darba-danger: #ef4444;
+  --darba-radius: 12px;
+}
+
+/* Page background */
+body, html {
+  background: var(--darba-bg) !important;
+  color: var(--darba-text) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Hide default Keycloak header/branding */
+#kc-header-wrapper {
+  font-size: 0 !important;
+  padding: 0 !important;
+}
+#kc-header-wrapper::after {
+  content: 'Darba';
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--darba-text);
+  display: block;
+  text-align: center;
+  padding: 40px 0 10px;
+}
+#kc-header {
+  background: transparent !important;
+  border: none !important;
+  color: var(--darba-text) !important;
+}
+
+/* Login card */
+#kc-login {
+  background: var(--darba-card) !important;
+}
+.login-pf-page .card-pf,
+#kc-form-wrapper,
+.card-pf {
+  background: var(--darba-card) !important;
+  border: 1px solid var(--darba-border) !important;
+  border-radius: var(--darba-radius) !important;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4) !important;
+  padding: 32px !important;
+  max-width: 420px !important;
+  margin: 0 auto !important;
+}
+
+/* Container */
+.login-pf-page {
+  background: var(--darba-bg) !important;
+}
+#kc-content-wrapper {
+  max-width: 420px !important;
+  margin: 0 auto !important;
+}
+
+/* Labels */
+label, .control-label {
+  color: var(--darba-muted) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+.form-control {
+  background: var(--darba-bg) !important;
+  border: 1px solid var(--darba-border) !important;
+  border-radius: 8px !important;
+  color: var(--darba-text) !important;
+  padding: 10px 14px !important;
+  font-size: 14px !important;
+  transition: border-color 0.2s !important;
+}
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+.form-control:focus {
+  border-color: var(--darba-primary) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Primary button */
+input[type="submit"],
+.btn-primary,
+#kc-login {
+  background: var(--darba-primary) !important;
+  border: none !important;
+  border-radius: 8px !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s !important;
+  width: 100% !important;
+}
+input[type="submit"]:hover,
+.btn-primary:hover {
+  background: var(--darba-primary-hover) !important;
+}
+
+/* Secondary/link buttons */
+.btn-default,
+a.btn {
+  background: transparent !important;
+  border: 1px solid var(--darba-border) !important;
+  border-radius: 8px !important;
+  color: var(--darba-text) !important;
+  padding: 10px 20px !important;
+  font-size: 14px !important;
+}
+
+/* Links */
+a, .login-pf-page a {
+  color: var(--darba-primary) !important;
+  text-decoration: none !important;
+}
+a:hover {
+  color: var(--darba-primary-hover) !important;
+  text-decoration: underline !important;
+}
+
+/* Error/alert messages */
+.alert-error, .alert-danger {
+  background: rgba(239, 68, 68, 0.1) !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+  border-radius: 8px !important;
+  color: var(--darba-danger) !important;
+  padding: 12px 16px !important;
+}
+.alert-warning {
+  background: rgba(234, 179, 8, 0.1) !important;
+  border: 1px solid rgba(234, 179, 8, 0.3) !important;
+  border-radius: 8px !important;
+  color: #eab308 !important;
+  padding: 12px 16px !important;
+}
+.alert-success {
+  background: rgba(34, 197, 94, 0.1) !important;
+  border: 1px solid rgba(34, 197, 94, 0.3) !important;
+  border-radius: 8px !important;
+  color: #22c55e !important;
+  padding: 12px 16px !important;
+}
+
+/* Info text */
+.kc-social-section,
+#kc-info,
+#kc-info-wrapper,
+.instruction {
+  color: var(--darba-muted) !important;
+  font-size: 13px !important;
+}
+
+/* Social login buttons */
+.kc-social-provider-logo {
+  margin-right: 8px !important;
+}
+.kc-social-item a {
+  background: var(--darba-bg) !important;
+  border: 1px solid var(--darba-border) !important;
+  border-radius: 8px !important;
+  color: var(--darba-text) !important;
+  padding: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: border-color 0.2s !important;
+}
+.kc-social-item a:hover {
+  border-color: var(--darba-primary) !important;
+  text-decoration: none !important;
+}
+
+/* Checkbox */
+.checkbox label,
+#rememberMe label {
+  color: var(--darba-muted) !important;
+  font-size: 13px !important;
+}
+
+/* Separator "or" */
+#kc-form-options,
+.kc-social-section-heading {
+  color: var(--darba-muted) !important;
+}
+
+/* Footer / powered by */
+#kc-attempt-account-link,
+.kc-footer {
+  color: var(--darba-muted) !important;
+}
+
+/* Registration form tweaks */
+#kc-register-form .form-group {
+  margin-bottom: 16px !important;
+}
+
+/* Locale selector */
+#kc-locale ul {
+  background: var(--darba-card) !important;
+  border: 1px solid var(--darba-border) !important;
+  border-radius: 8px !important;
+}
+#kc-locale li a {
+  color: var(--darba-text) !important;
+}

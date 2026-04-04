@@ -89,6 +89,7 @@ services:
       - KC_DB_PASSWORD=${POSTGRES_PASSWORD:-darba}
     volumes:
       - ./infra/keycloak/darba-realm.json:/opt/keycloak/data/import/darba-realm.json:ro
+      - ./infra/keycloak/themes/darba:/opt/keycloak/themes/darba:ro
     depends_on:
       postgres:
         condition: service_healthy
