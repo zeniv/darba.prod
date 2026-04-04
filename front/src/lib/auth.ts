@@ -5,6 +5,7 @@ const KEYCLOAK_CLIENT_ID = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID || "darba-
 const TOKEN_KEY = "darba_token";
 const REFRESH_KEY = "darba_refresh";
 const VERIFIER_KEY = "darba_pkce_verifier";
+const RETURN_TO_KEY = "darba_return_to";
 
 function base64urlEncode(data: ArrayBuffer | Uint8Array): string {
   const bytes = data instanceof Uint8Array ? data : new Uint8Array(data);
@@ -25,9 +26,12 @@ function getKeycloakBase() {
   return `${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}/protocol/openid-connect`;
 }
 
-export async function login(provider?: string) {
+export async function login(provider?: string, returnTo?: string) {
   const { verifier, challenge } = await generatePKCE();
   sessionStorage.setItem(VERIFIER_KEY, verifier);
+  if (returnTo) {
+    sessionStorage.setItem(RETURN_TO_KEY, returnTo);
+  }
 
   const params = new URLSearchParams({
     client_id: KEYCLOAK_CLIENT_ID,
@@ -126,6 +130,13 @@ export function getToken(): string | null {
 
 export function isLoggedIn(): boolean {
   return !!getToken();
+}
+
+export function consumeReturnTo(): string {
+  if (typeof window === "undefined") return "/";
+  const path = sessionStorage.getItem(RETURN_TO_KEY);
+  sessionStorage.removeItem(RETURN_TO_KEY);
+  return path || "/";
 }
 
 /** Parse JWT payload without verification (for display only) */

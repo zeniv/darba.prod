@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { login } from "@/lib/auth";
 
 interface ProviderConfig {
@@ -24,6 +25,16 @@ const DEFAULT_STYLE: ProviderConfig = {
 };
 
 export default function LoginPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="h-6 w-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>}>
+      <LoginContent />
+    </Suspense>
+  );
+}
+
+function LoginContent() {
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get("returnTo") || undefined;
   const [providers, setProviders] = useState<{ alias: string; displayName: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -59,7 +70,7 @@ export default function LoginPage() {
                 return (
                   <button
                     key={p.alias}
-                    onClick={() => login(p.alias)}
+                    onClick={() => login(p.alias, returnTo)}
                     className={`w-full flex items-center justify-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors ${style.bg} ${style.text}`}
                   >
                     <ProviderIcon alias={p.alias} />
@@ -81,7 +92,7 @@ export default function LoginPage() {
         ) : null}
 
         <button
-          onClick={() => login()}
+          onClick={() => login(undefined, returnTo)}
           className="w-full rounded-lg border border-border px-4 py-3 text-sm font-medium hover:bg-accent transition-colors"
         >
           Войти по email

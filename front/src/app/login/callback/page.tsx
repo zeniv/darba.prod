@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { handleCallback } from "@/lib/auth";
+import { handleCallback, consumeReturnTo } from "@/lib/auth";
 
 export default function AuthCallbackPage() {
   return (
@@ -26,7 +26,7 @@ function AuthCallbackContent() {
       }
       const ok = await handleCallback(code);
       if (ok) {
-        router.replace("/");
+        router.replace(consumeReturnTo());
       } else {
         setError("Authentication failed");
       }
