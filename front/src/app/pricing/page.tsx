@@ -38,7 +38,7 @@ function formatPrice(price: string, currency: string): string {
 }
 
 export default function PricingPage() {
-  const { data: plans } = useQuery({
+  const { data: plans, isLoading } = useQuery({
     queryKey: ["plans"],
     queryFn: fetchPlans,
     staleTime: 60_000,
@@ -55,6 +55,22 @@ export default function PricingPage() {
             Выберите подходящий план
           </p>
 
+          {isLoading ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="rounded-2xl border border-border p-6 flex flex-col gap-4">
+                  <div className="h-6 w-24 bg-muted animate-pulse rounded" />
+                  <div className="h-10 w-32 bg-muted animate-pulse rounded" />
+                  <div className="space-y-3 flex-1">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <div key={j} className="h-4 bg-muted animate-pulse rounded w-full" />
+                    ))}
+                  </div>
+                  <div className="h-10 bg-muted animate-pulse rounded-lg" />
+                </div>
+              ))}
+            </div>
+          ) : (
           <div className="grid md:grid-cols-3 gap-6">
             {displayPlans.map((plan, i) => {
               const highlighted = i === 1;
@@ -114,6 +130,7 @@ export default function PricingPage() {
               );
             })}
           </div>
+          )}
         </div>
       </div>
     </AppShell>

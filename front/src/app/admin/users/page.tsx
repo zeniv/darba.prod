@@ -22,7 +22,7 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["admin-users", search, page],
     queryFn: () =>
       apiFetch<{ users: UserRow[]; total: number; pages: number }>(
@@ -70,6 +70,15 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
+              {isLoading && users.length === 0 && Array.from({ length: 5 }).map((_, i) => (
+                <tr key={i}>
+                  {Array.from({ length: 6 }).map((_, j) => (
+                    <td key={j} className="px-4 py-3">
+                      <div className="h-4 bg-muted animate-pulse rounded w-full" />
+                    </td>
+                  ))}
+                </tr>
+              ))}
               {users.map((u) => (
                 <tr key={u.id} className="hover:bg-accent/50">
                   <td className="px-4 py-3">{u.email}</td>

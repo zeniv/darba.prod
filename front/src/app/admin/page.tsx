@@ -34,13 +34,38 @@ function StatCard({
   );
 }
 
+function StatCardSkeleton() {
+  return (
+    <div className="border border-border rounded-xl p-5">
+      <div className="flex items-center justify-between mb-3">
+        <div className="h-4 w-24 bg-muted animate-pulse rounded" />
+        <div className="h-4 w-4 bg-muted animate-pulse rounded" />
+      </div>
+      <div className="h-7 w-16 bg-muted animate-pulse rounded" />
+    </div>
+  );
+}
+
 export default function AdminDashboard() {
-  // TODO: pass real admin token
-  const { data: stats } = useQuery({
+  const { data: stats, isLoading } = useQuery({
     queryKey: ["admin-stats"],
     queryFn: () => apiFetch<Stats>("/admin/stats"),
     staleTime: 30_000,
   });
+
+  if (isLoading) {
+    return (
+      <div>
+        <h1 className="text-2xl font-bold mb-6">Дашборд</h1>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {Array.from({ length: 4 }).map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+      </div>
+    );
+  }
 
   const s = stats || {
     totalUsers: 0,

@@ -29,7 +29,7 @@ interface Ticket {
 export default function AdminSupportPage() {
   const [statusFilter, setStatusFilter] = useState("");
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["admin-tickets", statusFilter],
     queryFn: () =>
       apiFetch<{ tickets: Ticket[]; total: number }>(
@@ -60,6 +60,15 @@ export default function AdminSupportPage() {
 
       {/* Tickets */}
       <div className="space-y-2">
+        {isLoading && tickets.length === 0 && Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="border border-border rounded-lg p-4 flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-muted animate-pulse shrink-0" />
+            <div className="flex-1 space-y-2">
+              <div className="h-4 bg-muted animate-pulse rounded w-3/4" />
+              <div className="h-3 bg-muted animate-pulse rounded w-1/2" />
+            </div>
+          </div>
+        ))}
         {tickets.map((t: Ticket) => (
           <div
             key={t.id}
