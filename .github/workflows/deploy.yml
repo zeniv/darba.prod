@@ -34,6 +34,9 @@ jobs:
             docker compose up -d --build --remove-orphans
             docker image prune -f
 
+            # Reload nginx to re-resolve upstream DNS after container recreation
+            docker exec darba-nginx-1 nginx -s reload || true
+
             # Verify API health
             sleep 10
             if docker compose exec -T api wget -qO- http://localhost:8000/api/health > /dev/null 2>&1; then
